@@ -1,0 +1,22 @@
+[
+  { "id": "classic", "name": { "zh": "经典", "en": "Classic" }, "dark": false, "palette": { "bg": "#f7f7f5", "text": "#2b2b2b", "accent": "#3a3a3a" }, "effect": "motes", "effectColors": ["#cfc8bd", "#b8b0a3"] },
+  { "id": "danfeng", "name": { "zh": "丹枫", "en": "Red Maple" }, "dark": false, "palette": { "bg": "#fbf4ee", "text": "#3a2a22", "accent": "#c0552f" }, "effect": "maple", "effectColors": ["#d9663a", "#a83e1f"] },
+  { "id": "zihai", "name": { "zh": "紫霭", "en": "Lilac Haze" }, "dark": false, "palette": { "bg": "#f3effa", "text": "#2f2a3d", "accent": "#8a6bd1" }, "effect": "aurora", "effectColors": ["#b79cf0", "#d9a7e8"] },
+  { "id": "liuguang", "name": { "zh": "流光", "en": "Liquid Glass" }, "dark": false, "palette": { "bg": "#eef0f6", "text": "#2a2d3a", "accent": "#7b5cff" }, "effect": "orbs", "effectColors": ["#9b8cff", "#ff8fb0", "#7fd1c0"] },
+  { "id": "mo", "name": { "zh": "墨", "en": "Ink" }, "dark": false, "palette": { "bg": "#f6f3ec", "text": "#2a2722", "accent": "#8a7a4a" }, "effect": "motes", "effectColors": ["#cdbb86", "#a98f4f"] },
+  { "id": "jiqing", "name": { "zh": "霁青", "en": "Celadon" }, "dark": false, "palette": { "bg": "#eef5f0", "text": "#233029", "accent": "#4f9e84" }, "effect": "bubbles", "effectColors": ["#bfe0d2", "#8fc9b3"] },
+  { "id": "japandi", "name": { "zh": "日栖", "en": "Japandi" }, "dark": false, "palette": { "bg": "#f5efe6", "text": "#34291d", "accent": "#b08a5a" }, "effect": "petals", "effectColors": ["#f0d9c0", "#e6c3a0"] },
+  { "id": "zhu", "name": { "zh": "竹", "en": "Bamboo" }, "dark": false, "palette": { "bg": "#eef3ea", "text": "#233024", "accent": "#4f8a3f" }, "effect": "bamboo", "effectColors": ["#9cc47f", "#6fa24f"] },
+  { "id": "dongwudao", "name": { "zh": "动物岛", "en": "Animal Island" }, "dark": false, "palette": { "bg": "#f0f4ec", "text": "#2b3326", "accent": "#6aa86a" }, "effect": "motes", "effectColors": ["#cfe3c0", "#a7d39a"] },
+  { "id": "yinghuadao", "name": { "zh": "樱花岛", "en": "Sakura Island" }, "dark": false, "palette": { "bg": "#fbeef2", "text": "#3a2a30", "accent": "#e08aa8" }, "effect": "petals", "effectColors": ["#f7c7d8", "#f0a8c2"] },
+  { "id": "xuedao", "name": { "zh": "雪之岛", "en": "Snow Island" }, "dark": false, "palette": { "bg": "#eef3f8", "text": "#26303a", "accent": "#6a9fd1" }, "effect": "snow", "effectColors": ["#dceaf5", "#b9d6ee"] },
+  { "id": "dai", "name": { "zh": "黛", "en": "Graphite" }, "dark": true, "palette": { "bg": "#15171c", "text": "#e6e7ea", "accent": "#8a93a6" }, "effect": "stars", "effectColors": ["#b9c2d6", "#ffffff"] },
+  { "id": "ziye", "name": { "zh": "子夜", "en": "Midnight" }, "dark": true, "palette": { "bg": "#10131f", "text": "#e6e8f0", "accent": "#5b8cff" }, "effect": "stars", "effectColors": ["#8fb4ff", "#ffffff"] },
+  { "id": "degula", "name": { "zh": "德古拉", "en": "Dracula" }, "dark": true, "palette": { "bg": "#1e1b2e", "text": "#f0e9ff", "accent": "#bd93f9" }, "effect": "aurora", "effectColors": ["#bd93f9", "#ff79c6"] },
+  { "id": "luohuo", "name": { "zh": "炉火", "en": "Ember" }, "dark": true, "palette": { "bg": "#1f1714", "text": "#f0e3d8", "accent": "#d98a4f" }, "effect": "motes", "effectColors": ["#e0995a", "#b5612b"] },
+  { "id": "shuangye", "name": { "zh": "霜夜", "en": "Frost Night" }, "dark": true, "palette": { "bg": "#131a22", "text": "#e3edf5", "accent": "#6fb0d9" }, "effect": "snow", "effectColors": ["#cfe6f5", "#9fd0ee"] },
+  { "id": "yingye", "name": { "zh": "萤夜", "en": "Firefly Night" }, "dark": true, "palette": { "bg": "#181a12", "text": "#e8ead8", "accent": "#c5cf6a" }, "effect": "fireflies", "effectColors": ["#e8f06a", "#aeb84f"] },
+  { "id": "canghai", "name": { "zh": "沧海", "en": "Deep Sea" }, "dark": true, "palette": { "bg": "#0e1a1d", "text": "#dceef0", "accent": "#3fa6a0" }, "effect": "bubbles", "effectColors": ["#7fd0cb", "#4fa6a0"] },
+  { "id": "tingyu", "name": { "zh": "听雨", "en": "Listening Rain" }, "dark": true, "palette": { "bg": "#16181b", "text": "#e2e4e7", "accent": "#8aa0b0" }, "effect": "rain", "effectColors": ["#a8bcc9", "#7f97a6"] },
+  { "id": "feiye", "name": { "zh": "绯夜", "en": "Crimson Night" }, "dark": true, "palette": { "bg": "#1a1020", "text": "#f2dfe8", "accent": "#ff5c8a" }, "effect": "orbs", "effectColors": ["#ff5c8a", "#c04fff", "#7b5cff"] }
+]

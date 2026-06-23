@@ -1,0 +1,24 @@
+---
+import { t, type Locale } from '@/i18n';
+const { locale } = Astro.props as { locale: Locale };
+const other = locale === 'en' ? '/' : '/en';
+---
+<footer class="footer">
+  <div class="container foot-inner">
+    <span class="brand">墨 Mox</span>
+    <div class="cols">
+      <a href="#features">{t(locale, 'footer.product')}</a>
+      <a href="/docs">{t(locale, 'nav.docs')}</a>
+      <a href="https://github.com/Leejaywell/Mox">GitHub</a>
+      <a href={other}>{locale === 'en' ? '中文' : 'EN'}</a>
+    </div>
+  </div>
+</footer>
+<style>
+  .footer { border-top: 1px solid var(--hairline); margin-top: 96px; padding: 28px 0; }
+  .foot-inner { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 13px; }
+  .brand { font-weight: 600; }
+  .cols { display: flex; gap: 20px; }
+  .cols a:hover { color: var(--fg); }
+  @media (max-width: 480px) { .foot-inner { flex-direction: column; gap: 12px; } }
+</style>
