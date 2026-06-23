@@ -25,15 +25,22 @@ const enHref = new URL(base + enRel, Astro.site).href;
     <script is:inline>
       // Mark JS-on, and restore the saved theme palette BEFORE first paint (no FOUC of the
       // default theme when navigating between pages). Inline style on <html> beats the CSS :root.
-      document.documentElement.classList.add('js');
-      try {
-        var v = JSON.parse(localStorage.getItem('mox.theme.css') || 'null');
-        if (v) {
-          var s = document.documentElement.style;
-          s.setProperty('--bg', v.bg); s.setProperty('--fg', v.fg); s.setProperty('--accent', v.accent);
-          s.colorScheme = v.dark ? 'dark' : 'light';
+      (function () {
+        function restore() {
+          document.documentElement.classList.add('js');
+          try {
+            var v = JSON.parse(localStorage.getItem('mox.theme.css') || 'null');
+            if (!v) return;
+            var s = document.documentElement.style;
+            s.setProperty('--bg', v.bg); s.setProperty('--fg', v.fg); s.setProperty('--accent', v.accent);
+            s.colorScheme = v.dark ? 'dark' : 'light';
+          } catch (e) {}
         }
-      } catch (e) {}
+        restore();
+        // View-transition swaps copy root attributes from the incoming (un-themed) <html>,
+        // wiping the inline palette + `js` class — restore after each swap, before paint.
+        document.addEventListener('astro:after-swap', restore);
+      })();
     </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
