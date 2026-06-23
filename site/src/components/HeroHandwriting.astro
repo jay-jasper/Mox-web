@@ -5,28 +5,19 @@ const { locale } = Astro.props as { locale: Locale };
 const isEn = locale === 'en';
 const zh = '专注写作 优雅表达';
 const sub = isEn
-  ? 'A Markdown editor built for macOS. Markers slip away, leaving only clean words — so you can focus on expression itself.'
-  : '一款为 macOS 打造的 Markdown 编辑器。标记随手隐去，只留下干净的文字，让你专注于表达本身。';
+  ? 'A quiet writing space for macOS. WYSIWYG and natively fast — just you and the words.'
+  : '一个安静的 macOS 写作空间。所见即所得，原生流畅，让你只与文字相处。';
 ---
 <section id="hero" class="hero">
   <div class="container grid">
     <div class="lead">
-      <h1 class="hand">
-        <span class="line zh">{zh}</span>
-      </h1>
-
+      <h1 class="hand"><span class="zh">{zh}</span></h1>
       <p class="sub">{sub}</p>
-
       <div class="cta-row">
         <a class="btn" href="#download">{t(locale, 'nav.download')}</a>
         <a class="ghost" href="/docs">{isEn ? 'See how it works' : '看它怎么用'}</a>
       </div>
-      <div class="meta">
-        <a href="https://github.com/Leejaywell/Mox">GitHub</a>
-        <a href="/docs">{t(locale, 'nav.docs')}</a>
-      </div>
     </div>
-
     <div class="editor-wrap">
       <LiveEditor locale={locale} />
     </div>
@@ -34,42 +25,21 @@ const sub = isEn
 </section>
 
 <style>
-  .hero { padding: 72px 0 56px; }
-  .grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 56px; align-items: center; }
+  .hero { position: relative; display: flex; align-items: center; padding: 44px 0 64px; }
+  .grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: center; width: 100%; }
 
-  .hand { margin: 0; display: flex; flex-direction: column; gap: 6px; }
-  .hand .line { display: block; }
+  .hand { margin: 0; }
   .hand .zh { font-family: var(--hand-zh); font-size: clamp(48px, 7vw, 92px); line-height: 1.2; color: var(--fg); letter-spacing: 2px; }
-
   .sub { color: var(--text); font-size: clamp(15px, 1.5vw, 18px); margin: 28px 0 0; max-width: 30em; }
   .cta-row { display: flex; gap: 14px; align-items: center; margin-top: 30px; flex-wrap: wrap; }
   .btn { background: var(--btn); color: var(--btn-fg); padding: 13px 30px; border-radius: 999px; font-weight: 700; font-size: 16px; }
   .btn:hover { filter: brightness(1.06); }
   .ghost { padding: 13px 26px; border-radius: 999px; border: 1px solid var(--hairline); color: var(--fg); font-weight: 600; }
   .ghost:hover { background: color-mix(in srgb, var(--fg) 5%, transparent); }
-  .meta { display: flex; gap: 22px; margin-top: 20px; color: var(--muted); font-size: 14px; }
-  .meta a:hover { color: var(--fg); }
-
-  /* handwriting reveal — gated by .anim (added by JS) so no-JS shows final state */
-  .hero.anim .line { clip-path: inset(0 100% 0 0); }
-  .hero.anim .sub, .hero.anim .cta-row, .hero.anim .meta, .hero.anim .editor-wrap { opacity: 0; transform: translateY(14px); }
-  .hero.anim.writing-done .zh { clip-path: inset(0 0 0 0); transition: clip-path 1.1s ease; }
-  .hero.anim.writing-done .sub { opacity: 1; transform: none; transition: all .5s ease 1.0s; }
-  .hero.anim.writing-done .cta-row { opacity: 1; transform: none; transition: all .5s ease 1.15s; }
-  .hero.anim.writing-done .meta { opacity: 1; transform: none; transition: all .5s ease 1.25s; }
-  .hero.anim.writing-done .editor-wrap { opacity: 1; transform: none; transition: all .8s cubic-bezier(.2,.7,.2,1) .95s; }
 
   @media (max-width: 880px) {
     .grid { grid-template-columns: 1fr; gap: 36px; }
     .editor-wrap { order: 2; }
+    .hero { padding: 40px 0; min-height: 0; }
   }
 </style>
-
-<script>
-  const hero = document.getElementById('hero');
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (hero && !reduce) {
-    hero.classList.add('anim');
-    requestAnimationFrame(() => requestAnimationFrame(() => hero.classList.add('writing-done')));
-  }
-</script>

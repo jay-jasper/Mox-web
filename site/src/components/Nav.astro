@@ -70,8 +70,13 @@ const isEn = locale === 'en';
       strokeColor: '#f3ead8', strokeAnimationSpeed: 2.4, delayBetweenStrokes: 40,
       charDataLoader: (_c: string, onComplete: (d: unknown) => void) => onComplete(moData),
     });
-    if (reduce) writer.showCharacter();
-    else setTimeout(() => writer.animateCharacter(), 350);
+    if (reduce) {
+      writer.showCharacter();
+    } else {
+      const play = () => writer.animateCharacter();
+      setTimeout(play, 350);
+      setInterval(play, 6000);   // keep writing on a timer, never stops
+    }
   }
 </script>
 

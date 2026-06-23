@@ -72,10 +72,11 @@ export class AmbientEffect {
     const { type, density } = this.cfg;
     const area = this.w * this.h;
     if (BLOB.includes(type)) return type === 'aurora' ? 4 : 6;
-    let base = Math.round(area / 11000);
-    if (type === 'rain') base = Math.round(area / 6000);
-    if (type === 'stars') base = Math.round(area / 9000);
-    return Math.max(8, Math.min(220, Math.round(base * density)));
+    let base = Math.round(area / 14000);
+    if (type === 'rain') base = Math.round(area / 7000);
+    if (type === 'stars') base = Math.round(area / 11000);
+    if (type === 'fireflies') base = Math.round(area / 30000); // glow is costly — keep sparse
+    return Math.max(8, Math.min(150, Math.round(base * density)));
   }
 
   private spawn() {
@@ -197,12 +198,18 @@ export class AmbientEffect {
         ctx.beginPath(); ctx.arc(0, 0, p.r, 0, 6.2832); ctx.fill();
         ctx.globalCompositeOperation = 'source-over';
       } else if (type === 'fireflies') {
+        // Cheap glow: an additive radial-gradient halo + a bright core (no shadowBlur).
         const pulse = 0.35 + 0.65 * Math.abs(Math.sin(p.ph));
         ctx.globalCompositeOperation = 'lighter';
-        ctx.shadowBlur = 8; ctx.shadowColor = c;
+        const halo = p.r * 4;
+        const g = ctx.createRadialGradient(0, 0, 0, 0, 0, halo);
+        g.addColorStop(0, hexA(c, p.a * pulse * 0.8));
+        g.addColorStop(1, hexA(c, 0));
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(0, 0, halo, 0, 6.2832); ctx.fill();
         ctx.fillStyle = hexA(c, p.a * pulse);
         ctx.beginPath(); ctx.arc(0, 0, p.r, 0, 6.2832); ctx.fill();
-        ctx.shadowBlur = 0; ctx.globalCompositeOperation = 'source-over';
+        ctx.globalCompositeOperation = 'source-over';
       } else if (type === 'petals' || type === 'maple' || type === 'bamboo') {
         ctx.rotate(p.rot); ctx.fillStyle = hexA(c, p.a);
         const rx = type === 'bamboo' ? p.r * 1.8 : p.r;

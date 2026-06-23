@@ -11,7 +11,11 @@
       "group": "功能",
       "items": [
         { "slug": "editor", "title": "编辑器" },
+        { "slug": "math-diagrams", "title": "数学 · 图表 · 画布" },
+        { "slug": "knowledge-graph", "title": "知识图谱" },
+        { "slug": "resume", "title": "简历工坊" },
         { "slug": "quick-notes", "title": "速记" },
+        { "slug": "ai", "title": "AI 助手" },
         { "slug": "export", "title": "导出" }
       ]
     },
@@ -35,7 +39,11 @@
       "group": "Features",
       "items": [
         { "slug": "editor", "title": "Editor" },
+        { "slug": "math-diagrams", "title": "Math · Diagrams · Canvas" },
+        { "slug": "knowledge-graph", "title": "Knowledge Graph" },
+        { "slug": "resume", "title": "Resume Studio" },
         { "slug": "quick-notes", "title": "Quick Notes" },
+        { "slug": "ai", "title": "AI Assistant" },
         { "slug": "export", "title": "Export" }
       ]
     },

@@ -3,11 +3,11 @@ import type { Locale } from '@/i18n';
 const { locale } = Astro.props as { locale: Locale };
 const isEn = locale === 'en';
 const modes = isEn
-  ? [['wysiwyg', 'WYSIWYG'], ['source', 'Source'], ['split', 'Split']]
-  : [['wysiwyg', '所见即所得'], ['source', '源码'], ['split', '分屏']];
+  ? [['wysiwyg', 'Rich Text'], ['source', 'Source'], ['split', 'Split']]
+  : [['wysiwyg', '富文本'], ['source', '源码'], ['split', '分屏']];
 const initial = isEn
-  ? `# Hello, Mox\n\n**WYSIWYG** Markdown writing — markers hide as you type.\n\n- Math, diagrams, mind-maps\n- Knowledge graph & quick notes\n- 20 themes with live effects\n\n> Write the first line; the rest will follow.\n\n\`mox()\``
-  : `# 你好，Mox\n\n**所见即所得**的 Markdown 写作，标记随光标隐去。\n\n- 数学、图表、思维导图\n- 知识图谱与速记\n- 20 套主题与动态特效\n\n> 写下第一行，余下的自会跟来。\n\n\`mox()\``;
+  ? `# Hello, Mox\n\n**Rich-text** Markdown writing — markers hide as you type.\n\n- Math, diagrams, mind-maps\n- Knowledge graph & quick notes\n- One-click export\n\n> Write the first line; the rest will follow.\n\n\`mox()\``
+  : `# 你好，Mox\n\n**富文本**式的 Markdown 写作，标记随光标隐去。\n\n- 数学、图表、思维导图\n- 知识图谱与速记\n- 一键导出多种格式\n\n> 写下第一行，余下的自会跟来。\n\n\`mox()\``;
 ---
 <div id="live-editor" class="le" data-initial={initial}>
   <div class="le-bar">
@@ -18,11 +18,11 @@ const initial = isEn
       ))}
     </div>
   </div>
-  <div class="le-body">
-    <div class="pane wysiwyg prose" contenteditable="true" spellcheck="false"></div>
-    <textarea class="pane source" spellcheck="false"></textarea>
+  <div class="le-body" data-mode="wysiwyg">
+    <div class="pane wysiwyg prose"></div>
+    <pre class="pane source"></pre>
     <div class="pane split">
-      <textarea class="split-src" spellcheck="false"></textarea>
+      <pre class="split-src"></pre>
       <div class="split-prev prose"></div>
     </div>
   </div>
@@ -44,23 +44,26 @@ const initial = isEn
   #live-editor .seg .m.on { background: var(--card); color: var(--fg); box-shadow: 0 1px 3px rgba(0,0,0,.1); }
 
   #live-editor .le-body { position: relative; flex: 1; min-height: 0; }
-  #live-editor .pane { display: none; height: 100%; width: 100%; }
+  #live-editor .pane { display: none; height: 100%; width: 100%; margin: 0; }
   #live-editor .le-body[data-mode="wysiwyg"] .wysiwyg { display: block; }
   #live-editor .le-body[data-mode="source"] .source { display: block; }
   #live-editor .le-body[data-mode="split"] .split { display: flex; }
 
-  #live-editor .wysiwyg, #live-editor .split-prev { overflow: auto; padding: 22px 26px; outline: none; }
-  #live-editor textarea { resize: none; border: none; outline: none; background: none; color: var(--text);
-    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 14px; line-height: 1.7; padding: 22px 26px; }
-  #live-editor .source { display: none; }
+  #live-editor .wysiwyg, #live-editor .split-prev { overflow: auto; padding: 22px 26px; }
+  #live-editor pre.source, #live-editor pre.split-src { overflow: auto; white-space: pre-wrap; word-break: break-word;
+    color: var(--text); font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 14px; line-height: 1.7; padding: 22px 26px; }
   #live-editor .split { gap: 0; }
   #live-editor .split .split-src { flex: 1; border-right: 1px solid var(--hairline); }
   #live-editor .split .split-prev { flex: 1; }
 
-  /* prose styling for rendered markdown (wysiwyg + split preview) */
+  /* blinking type cursor */
+  #live-editor .cursor { display: inline-block; width: 2px; height: 1.05em; vertical-align: text-bottom;
+    background: var(--accent); margin-left: 1px; animation: le-blink 1s step-end infinite; }
+  @keyframes le-blink { 50% { opacity: 0; } }
+
+  /* prose styling for rendered markdown */
   #live-editor .prose { color: var(--text); }
   #live-editor .prose h1 { font-size: 24px; margin: 0 0 12px; }
-  #live-editor .prose h2 { font-size: 19px; margin: 18px 0 8px; }
   #live-editor .prose p { margin: 10px 0; }
   #live-editor .prose ul { margin: 10px 0; padding-left: 20px; }
   #live-editor .prose li { margin: 4px 0; }
@@ -73,46 +76,64 @@ const initial = isEn
 
 <script>
   import MarkdownIt from 'markdown-it';
-  import TurndownService from 'turndown';
 
   const root = document.getElementById('live-editor');
   if (root) {
     const md = new MarkdownIt({ html: false, linkify: true, breaks: false });
-    const td = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced', bulletListMarker: '-' });
     const body = root.querySelector('.le-body') as HTMLElement;
     const wys = root.querySelector('.wysiwyg') as HTMLElement;
-    const src = root.querySelector('.source') as HTMLTextAreaElement;
-    const splitSrc = root.querySelector('.split-src') as HTMLTextAreaElement;
+    const src = root.querySelector('.source') as HTMLElement;
+    const splitSrc = root.querySelector('.split-src') as HTMLElement;
     const splitPrev = root.querySelector('.split-prev') as HTMLElement;
+    const target = root.dataset.initial || '';
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    let state = root.dataset.initial || '';
     let mode = 'wysiwyg';
+    let shown = 0;
+    const CURSOR = '<span class="cursor"></span>';
 
-    function syncInto(m: string) {
-      if (m === 'wysiwyg') wys.innerHTML = md.render(state);
-      else if (m === 'source') src.value = state;
-      else { splitSrc.value = state; splitPrev.innerHTML = md.render(state); }
+    function escapeHtml(s: string) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    function render() {
+      const txt = target.slice(0, shown);
+      const typing = shown < target.length;
+      if (mode === 'wysiwyg') {
+        wys.innerHTML = md.render(txt) + (typing ? CURSOR : '');
+      } else if (mode === 'source') {
+        src.innerHTML = escapeHtml(txt) + (typing ? CURSOR : '');
+      } else {
+        splitSrc.innerHTML = escapeHtml(txt) + (typing ? CURSOR : '');
+        splitPrev.innerHTML = md.render(txt);
+      }
     }
     function setMode(m: string) {
-      // capture latest edits from the current mode before switching
-      if (mode === 'wysiwyg') state = td.turndown(wys.innerHTML).trim();
-      else if (mode === 'source') state = src.value;
-      else state = splitSrc.value;
       mode = m;
       body.dataset.mode = m;
       root.querySelectorAll('.seg .m').forEach((b) => b.classList.toggle('on', (b as HTMLElement).dataset.mode === m));
-      syncInto(m);
+      render();
+    }
+    root.querySelectorAll<HTMLButtonElement>('.seg .m').forEach((b) =>
+      b.addEventListener('click', () => setMode(b.dataset.mode!)));
+
+    // Read-only typewriter — types itself out once the editor scrolls into view.
+    function type() {
+      if (shown >= target.length) { render(); return; }
+      shown++;
+      render();
+      const ch = target[shown - 1];
+      // pause a little longer after newlines / punctuation for a natural rhythm
+      const delay = ch === '\n' ? 170 : /[，。、,.\s]/.test(ch) ? 90 : 38 + Math.random() * 34;
+      window.setTimeout(type, delay);
     }
 
-    // live edits
-    let t: number | undefined;
-    wys.addEventListener('input', () => { window.clearTimeout(t); t = window.setTimeout(() => { state = td.turndown(wys.innerHTML).trim(); }, 250); });
-    src.addEventListener('input', () => { state = src.value; });
-    splitSrc.addEventListener('input', () => { state = splitSrc.value; splitPrev.innerHTML = md.render(state); });
-
-    root.querySelectorAll<HTMLButtonElement>('.seg .m').forEach((b) => b.addEventListener('click', () => setMode(b.dataset.mode!)));
-
-    body.dataset.mode = 'wysiwyg';
-    syncInto('wysiwyg');
+    if (reduce) { shown = target.length; render(); }
+    else {
+      render();
+      const io = new IntersectionObserver((es) => {
+        for (const e of es) if (e.isIntersecting) { io.disconnect(); window.setTimeout(type, 500); }
+      }, { threshold: 0.4 });
+      io.observe(root);
+    }
   }
 </script>

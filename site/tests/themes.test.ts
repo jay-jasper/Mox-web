@@ -6,7 +6,8 @@ describe('themes data', () => {
     expect(getThemes().length).toBe(20);
   });
   it('looks up a theme by id', () => {
-    expect(getTheme('liuguang')?.name.zh).toBe('流光');
+    expect(getTheme('liquidglass')?.name.zh).toBe('流光');
+    expect(getTheme('island')?.name.zh).toBe('动物岛');
   });
   it('every theme uses a known effect type', () => {
     for (const th of getThemes()) {

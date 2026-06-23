@@ -6,17 +6,14 @@ const L = (zh: string, en: string) => (locale === 'en' ? en : zh);
 interface Item { kind: string; t: string; d: string; }
 const items: Item[] = [
   { kind: 'wysiwyg', t: L('所见即所得', 'WYSIWYG, truly'),
-    d: L('Typora 风格的混合编辑：标记随光标显隐，写的就是看到的。折叠、智能标点、拼写检查，一切恰到好处。',
-         'A Typora-style hybrid editor: syntax markers appear only at the caret. Folding, smart punctuation, spell-check — all in their place.') },
+    d: L('混合式所见即所得：标记随光标显隐，写的就是看到的。折叠、智能标点、拼写检查，一切恰到好处。',
+         'A hybrid WYSIWYG editor: syntax markers appear only at the caret. Folding, smart punctuation, spell-check — all in their place.') },
   { kind: 'math', t: L('数学 · 图表 · 思维导图画布', 'Math, diagrams, canvas'),
     d: L('SwiftMath 渲染行内与独立公式；Mermaid / Vega / Graphviz 实时绘图；一键把文档变成 Excalidraw 思维导图画布。',
          'SwiftMath for inline & display equations; live Mermaid / Vega / Graphviz; turn any doc into an Excalidraw mind-map canvas.') },
   { kind: 'graph', t: L('知识图谱', 'Knowledge graph'),
     d: L('用 [[wiki 链接]] 连接整个工作区，力导向图谱让想法之间的脉络看得见，可缩放、可拖拽。',
          'Link your whole workspace with [[wiki links]]. A force-directed graph makes the connections between ideas visible — zoom and drag.') },
-  { kind: 'pdf', t: L('PDF 阅读与标注', 'Read & annotate PDFs'),
-    d: L('在同一个窗口读 PDF：文本选择、高亮、批注、双页模式、暗色反相，读到哪标到哪。',
-         'Read PDFs in the same window: select text, highlight, annotate, two-page mode, dark invert. Leave traceable notes as you go.') },
   { kind: 'resume', t: L('简历工坊', 'Resume Studio'),
     d: L('左侧结构化表单，右侧实时分页预览；多套模板、可拖拽排序板块，导出即用。',
          'Structured form on the left, live paginated preview on the right. Multiple templates, drag-to-reorder sections, export-ready.') },
@@ -74,9 +71,9 @@ const items: Item[] = [
 </section>
 
 <style>
-  .features { padding: 64px 0 32px; }
-  .features h2 { text-align: center; font-size: clamp(28px, 4vw, 44px); margin: 0 0 56px; }
-  .list { display: flex; flex-direction: column; gap: 72px; }
+  .features { padding: 40px 0 24px; }
+  .features h2 { text-align: center; font-size: clamp(28px, 4vw, 44px); margin: 0 0 44px; }
+  .list { display: flex; flex-direction: column; gap: 52px; }
   .block { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
   .block.rev .copy { order: 2; }
   .copy h3 { font-size: clamp(22px, 3vw, 30px); margin: 0 0 12px; }

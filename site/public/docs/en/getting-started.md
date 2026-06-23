@@ -1,6 +1,6 @@
 # Getting Started
 
-Welcome to **Mox** — a Typora-style native macOS WYSIWYG Markdown editor.
+Welcome to **Mox** — a WYSIWYG Markdown editor built for macOS. Markers slip away, leaving only clean words.
 
 ## Install
 
@@ -10,10 +10,22 @@ Welcome to **Mox** — a Typora-style native macOS WYSIWYG Markdown editor.
 
 > Requires macOS 13 or later.
 
-## Your first document
+## Open a workspace
 
-- Open a folder as your workspace.
-- Create a `.md` file and just start writing — syntax markers show and hide around the caret.
-- Use `⌘N` to create, `⌘S` to save.
+Mox treats any folder as a workspace — no proprietary format, it reads and writes your local `.md` files directly.
 
-Next, explore [Themes & Effects](#/en/themes) to set the mood for your writing.
+- Click "Open Folder…" in the sidebar, or `⌘O` to pick a directory.
+- Browse, create, rename and delete in the file tree.
+- Open several workspace roots at once.
+
+## Write your first note
+
+- `⌘N` to create a document and just start writing — typing `#`, `-`, `>` instantly becomes headings, lists, quotes.
+- `⌘S` to save; `⌘T` new tab; `⌘W` close tab.
+- Switch between **Rich Text / Source / Split** modes from the top bar.
+
+## Next
+
+- [Editor](#/en/editor): writing, folding, smart punctuation
+- [Themes & Effects](#/en/themes): 20 themes to set the mood
+- [Shortcuts](#/en/shortcuts): the keys you'll use most

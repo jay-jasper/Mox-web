@@ -1,19 +1,36 @@
 # Editor
 
-Mox's editor is a Typora-style hybrid WYSIWYG: source and rendering are one, markers reveal around the caret.
+Mox's editor is a hybrid WYSIWYG: source and rendering are one — markers appear only at the caret and slip away once you move on.
+
+## Three modes
+
+- **Rich Text**: WYSIWYG — the final, focused form for reading and writing.
+- **Source**: raw Markdown, ideal for fine edits and pasting.
+- **Split**: source on the left, live preview on the right, synced scrolling.
+
+Switch from the top bar; all three share the same content.
 
 ## Writing
 
-- Type `#` + space for a heading, `-` + space for a list.
-- Select text and press `⌘B` for bold, `⌘I` for italic.
-- Inline code uses backticks; code blocks use triple backticks.
+| Type | Result |
+| --- | --- |
+| `# / ## / ###` | Headings |
+| `- ` / `1. ` | Bullet / numbered list |
+| `- [ ]` | Task list |
+| `> ` | Blockquote |
+| `**bold**` `*italic*` | Inline emphasis |
+| backticks | Inline code; triple backticks for code blocks |
+| `---` | Divider |
 
-## Math & diagrams
+## Power editing
 
-- Inline math `$E=mc^2$`, display math with `$$ … $$` (rendered by SwiftMath).
-- Use `mermaid` / `vega` / `graphviz` as a code block language for live diagrams.
-- Turn any document into an Excalidraw mind-map canvas in one click.
+- **Folding**: collapse heading levels to focus on one section.
+- **Smart punctuation**: automatic pairing and conversion.
+- **Spell-check**: follows the system dictionary.
+- **Find & replace**: `⌘F` opens the find bar — regex, case, whole-word.
+- **Images**: drag or paste; saved as a local relative path or uploaded, per your settings.
 
-## Knowledge graph
+## Outline & status
 
-Connect notes with `[[wiki links]]` and open the knowledge graph to see the force-directed web of relationships.
+- Reveal the **outline panel** (top-right) to jump by heading.
+- The status bar shows word count, line/column, and reading time.
