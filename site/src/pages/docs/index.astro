@@ -1,0 +1,126 @@
+---
+import Base from '@/layouts/Base.astro';
+---
+<Base title="Mox 文档 · Docs" description="Mox documentation">
+  <div id="docs" class="docs container" data-base={import.meta.env.BASE_URL}>
+    <aside class="side">
+      <input id="docs-search" class="search" type="search" placeholder="搜索 / Search" aria-label="Search docs" />
+      <nav id="docs-nav" class="nav"></nav>
+    </aside>
+    <article id="docs-content" class="content prose">
+      <p class="loading">Loading…</p>
+    </article>
+    <aside class="toc"><div id="docs-toc"></div></aside>
+  </div>
+</Base>
+
+<!-- is:global because the nav / TOC / prose content is injected client-side via innerHTML and
+     would not receive Astro's scope attribute. Everything is prefixed with #docs so it can't leak. -->
+<style is:global>
+  #docs { display: grid; grid-template-columns: 240px minmax(0, 1fr) 180px; gap: 36px; padding-top: 36px; padding-bottom: 80px; align-items: start; }
+  #docs .side { position: sticky; top: 76px; }
+  #docs .search { width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--hairline);
+            background: color-mix(in srgb, var(--fg) 4%, transparent); color: var(--fg); margin-bottom: 16px; }
+  #docs .nav .group { margin-bottom: 18px; }
+  #docs .nav .glabel { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+  #docs .nav a { display: block; padding: 6px 10px; border-radius: 7px; color: var(--muted); font-size: 14px; }
+  #docs .nav a:hover { color: var(--fg); background: color-mix(in srgb, var(--fg) 5%, transparent); }
+  #docs .nav a.active { color: var(--fg); background: color-mix(in srgb, var(--accent) 16%, transparent); }
+
+  #docs .toc { position: sticky; top: 76px; font-size: 13px; }
+  #docs .toc .glabel { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+  #docs .toc a { display: block; color: var(--muted); padding: 4px 0; }
+  #docs .toc a.h3 { padding-left: 12px; }
+  #docs .toc a:hover { color: var(--fg); }
+
+  #docs .prose { line-height: 1.8; max-width: 760px; }
+  #docs .prose h1 { font-size: 34px; margin: 0 0 18px; }
+  #docs .prose h2 { font-size: 24px; margin: 40px 0 12px; padding-top: 8px; }
+  #docs .prose h3 { font-size: 19px; margin: 28px 0 10px; }
+  #docs .prose p, #docs .prose li { color: color-mix(in srgb, var(--fg) 88%, transparent); }
+  #docs .prose a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  #docs .prose code { font-family: ui-monospace, monospace; font-size: .9em; background: color-mix(in srgb, var(--fg) 9%, transparent); padding: 2px 6px; border-radius: 5px; }
+  #docs .prose pre { background: color-mix(in srgb, var(--fg) 7%, transparent); padding: 16px; border-radius: 10px; overflow: auto; }
+  #docs .prose pre code { background: none; padding: 0; }
+  #docs .prose blockquote { margin: 16px 0; padding: 8px 16px; border-left: 3px solid var(--accent); color: var(--muted); }
+  #docs .prose table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+  #docs .prose th, #docs .prose td { border: 1px solid var(--hairline); padding: 8px 12px; text-align: left; }
+  #docs .prose th { background: color-mix(in srgb, var(--fg) 6%, transparent); }
+
+  @media (max-width: 900px) {
+    #docs { grid-template-columns: 1fr; }
+    #docs .toc { display: none; }
+    #docs .side { position: static; }
+  }
+</style>
+
+<script>
+  import MarkdownIt from 'markdown-it';
+
+  const md = new MarkdownIt({ html: false, linkify: true, typographer: true });
+  const root = document.getElementById('docs')!;
+  const BASE = root.dataset.base || '/';
+  const navEl = document.getElementById('docs-nav')!;
+  const contentEl = document.getElementById('docs-content')!;
+  const tocEl = document.getElementById('docs-toc')!;
+  const searchEl = document.getElementById('docs-search') as HTMLInputElement;
+
+  type Item = { slug: string; title: string };
+  type Group = { group: string; items: Item[] };
+  let manifest: Record<string, Group[]> = {};
+
+  function parseHash() {
+    const m = location.hash.match(/^#\/(zh|en)\/([\w-]+)/);
+    return m ? { lang: m[1], slug: m[2] } : { lang: 'zh', slug: 'getting-started' };
+  }
+
+  function buildNav(lang: string, slug: string) {
+    const groups = manifest[lang] || [];
+    navEl.innerHTML = groups.map((g) => `
+      <div class="group">
+        <p class="glabel">${g.group}</p>
+        ${g.items.map((it) => `<a href="#/${lang}/${it.slug}" class="${it.slug === slug ? 'active' : ''}">${it.title}</a>`).join('')}
+      </div>`).join('');
+  }
+
+  function slugify(s: string) { return s.trim().toLowerCase().replace(/[^\w一-龥]+/g, '-'); }
+
+  function buildToc() {
+    const heads = contentEl.querySelectorAll('h2, h3');
+    const parts: string[] = [];
+    heads.forEach((h) => {
+      const id = slugify(h.textContent || '');
+      h.id = id;
+      parts.push(`<a class="${h.tagName.toLowerCase()}" href="#${id}">${h.textContent}</a>`);
+    });
+    tocEl.innerHTML = parts.length ? `<p class="glabel">${parseHash().lang === 'en' ? 'On this page' : '本页目录'}</p>${parts.join('')}` : '';
+  }
+
+  async function route() {
+    const { lang, slug } = parseHash();
+    buildNav(lang, slug);
+    try {
+      const res = await fetch(`${BASE}docs/${lang}/${slug}.md`);
+      contentEl.innerHTML = res.ok ? md.render(await res.text()) : '<h1>404</h1>';
+    } catch {
+      contentEl.innerHTML = '<h1>404</h1>';
+    }
+    buildToc();
+    contentEl.scrollIntoView({ block: 'start' });
+  }
+
+  searchEl.addEventListener('input', () => {
+    const q = searchEl.value.trim().toLowerCase();
+    navEl.querySelectorAll('a').forEach((a) => {
+      (a as HTMLElement).style.display = !q || a.textContent!.toLowerCase().includes(q) ? '' : 'none';
+    });
+  });
+
+  async function init() {
+    manifest = await (await fetch(`${BASE}docs/manifest.json`)).json();
+    if (!location.hash) location.hash = '#/zh/getting-started';
+    await route();
+    window.addEventListener('hashchange', route);
+  }
+  init();
+</script>

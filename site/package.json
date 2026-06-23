@@ -12,9 +12,11 @@
   },
   "dependencies": {
     "astro": "^4.16.0",
-    "hanzi-writer": "^3.7.3"
+    "hanzi-writer": "^3.7.3",
+    "markdown-it": "^14.2.0"
   },
   "devDependencies": {
+    "@types/markdown-it": "^14.1.2",
     "playwright": "^1.61.0",
     "typescript": "^5.6.0",
     "vitest": "^2.1.0"

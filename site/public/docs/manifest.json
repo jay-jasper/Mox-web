@@ -1,0 +1,50 @@
+{
+  "zh": [
+    {
+      "group": "开始",
+      "items": [
+        { "slug": "getting-started", "title": "快速上手" },
+        { "slug": "themes", "title": "主题与特效" }
+      ]
+    },
+    {
+      "group": "功能",
+      "items": [
+        { "slug": "editor", "title": "编辑器" },
+        { "slug": "quick-notes", "title": "速记" },
+        { "slug": "export", "title": "导出" }
+      ]
+    },
+    {
+      "group": "参考",
+      "items": [
+        { "slug": "shortcuts", "title": "快捷键" },
+        { "slug": "faq", "title": "常见问题" }
+      ]
+    }
+  ],
+  "en": [
+    {
+      "group": "Start",
+      "items": [
+        { "slug": "getting-started", "title": "Getting Started" },
+        { "slug": "themes", "title": "Themes & Effects" }
+      ]
+    },
+    {
+      "group": "Features",
+      "items": [
+        { "slug": "editor", "title": "Editor" },
+        { "slug": "quick-notes", "title": "Quick Notes" },
+        { "slug": "export", "title": "Export" }
+      ]
+    },
+    {
+      "group": "Reference",
+      "items": [
+        { "slug": "shortcuts", "title": "Shortcuts" },
+        { "slug": "faq", "title": "FAQ" }
+      ]
+    }
+  ]
+}
