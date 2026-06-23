@@ -4,7 +4,7 @@
 
 ## 安装
 
-1. 从官网下载区获取最新版本（即将发布，敬请期待）。
+1. 从 [GitHub Releases](https://github.com/jay-jasper/Mox-web/releases/latest) 下载最新版本。
 2. 打开 `.dmg`，把 Mox 拖入「应用程序」。
 3. 首次启动若提示来源未知，在「系统设置 › 隐私与安全性」中点「仍要打开」。
 
