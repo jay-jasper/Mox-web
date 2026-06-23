@@ -1,0 +1,110 @@
+---
+import { getThemes } from '@/data/themes';
+import type { Locale } from '@/i18n';
+const { locale } = Astro.props as { locale: Locale };
+const themes = getThemes();
+const first = themes[0];
+const title = locale === 'en' ? '20 themes, alive' : '20 套主题，会呼吸的光';
+const sub = locale === 'en'
+  ? 'Each theme carries its own ambient effect — rendered live, right here.'
+  : '每套主题都带专属动态特效 —— 此刻就在网页里实时渲染。';
+---
+<section id="themes" class="gallery">
+  <div class="container">
+    <h2>{title}</h2>
+    <p class="sub">{sub}</p>
+
+    <div id="theme-stage" class="stage"
+         style={`--bg:${first.palette.bg};--text:${first.palette.text};--ac:${first.palette.accent}`}>
+      <canvas id="theme-fx" class="fx"></canvas>
+      <div class="preview">
+        <div class="bar"><span></span><span></span><span></span></div>
+        <div class="doc">
+          <div class="h1">{locale === 'en' ? 'The Mountain' : '山中'}</div>
+          <div class="p">{locale === 'en' ? 'Clouds rest on the ridge; ink rests on the page.' : '云在岭上歇脚，墨在纸上停留。'}</div>
+          <div class="q">{locale === 'en' ? '“Style is the dress of thoughts.”' : '「行到水穷处，坐看云起时。」'}</div>
+          <div class="code">mox --theme</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rail" role="listbox" aria-label={locale === 'en' ? 'Themes' : '主题'}>
+      {themes.map((th, i) => (
+        <button class:list={["card", { active: i === 0 }]} role="option" aria-selected={i === 0}
+          data-effect={th.effect} data-colors={th.effectColors.join(',')}
+          data-bg={th.palette.bg} data-text={th.palette.text} data-ac={th.palette.accent}>
+          <span class="sw" style={`background:${th.palette.bg};border-color:${th.palette.accent}`}>
+            <span class="dot" style={`background:${th.palette.accent}`}></span>
+          </span>
+          <span class="nm">{th.name[locale] ?? th.name.zh}</span>
+        </button>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .gallery { padding: 96px 0; }
+  .gallery h2 { font-size: clamp(28px, 4vw, 44px); text-align: center; margin: 0 0 10px; }
+  .sub { text-align: center; color: var(--muted); margin: 0 auto 36px; max-width: 560px; }
+
+  .stage { position: relative; height: clamp(300px, 42vw, 440px); border-radius: 18px; overflow: hidden;
+           background: var(--bg); border: 1px solid var(--hairline); display: flex; align-items: center; justify-content: center;
+           transition: background .5s ease; }
+  .stage .fx { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .preview { position: relative; z-index: 1; width: min(560px, 86%); border-radius: 12px;
+             background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(6px);
+             border: 1px solid color-mix(in srgb, var(--text) 14%, transparent); box-shadow: 0 24px 60px rgba(0,0,0,.30); }
+  .preview .bar { display: flex; gap: 7px; padding: 11px 14px; border-bottom: 1px solid color-mix(in srgb, var(--text) 12%, transparent); }
+  .preview .bar span { width: 10px; height: 10px; border-radius: 50%; background: color-mix(in srgb, var(--text) 30%, transparent); }
+  .preview .doc { padding: 20px 24px 24px; color: var(--text); transition: color .5s ease; }
+  .preview .h1 { font-family: var(--serif); font-size: 24px; margin-bottom: 8px; }
+  .preview .p { opacity: .82; line-height: 1.8; }
+  .preview .q { margin-top: 10px; font-family: var(--serif); color: var(--ac); transition: color .5s ease; }
+  .preview .code { margin-top: 14px; font-family: ui-monospace, monospace; font-size: 13px;
+                   color: var(--ac); background: color-mix(in srgb, var(--ac) 12%, transparent);
+                   display: inline-block; padding: 3px 10px; border-radius: 6px; }
+
+  .rail { display: flex; gap: 12px; overflow-x: auto; padding: 24px 4px 8px; scroll-snap-type: x proximity; }
+  .rail::-webkit-scrollbar { height: 6px; }
+  .rail::-webkit-scrollbar-thumb { background: var(--hairline); border-radius: 3px; }
+  .card { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 8px;
+          background: none; border: none; cursor: pointer; padding: 4px; scroll-snap-align: start; }
+  .sw { display: flex; align-items: center; justify-content: center; width: 72px; height: 48px; border-radius: 10px;
+        border: 2px solid; transition: transform .15s ease, box-shadow .15s ease; }
+  .card:hover .sw { transform: translateY(-3px); }
+  .card.active .sw { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--fg); }
+  .sw .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .nm { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .card.active .nm { color: var(--fg); }
+</style>
+
+<script>
+  import { AmbientEffect } from '@/effects/ambient';
+  import type { EffectType } from '@/data/themes.schema';
+
+  const stage = document.getElementById('theme-stage');
+  const canvas = document.getElementById('theme-fx') as HTMLCanvasElement | null;
+  if (stage && canvas) {
+    const first = document.querySelector<HTMLButtonElement>('.rail .card.active');
+    const fx = new AmbientEffect(canvas, {
+      type: (first?.dataset.effect as EffectType) || 'stars',
+      colors: (first?.dataset.colors || '#ffffff').split(','),
+    });
+    fx.start();
+
+    document.querySelectorAll<HTMLButtonElement>('.rail .card').forEach((card) => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.rail .card').forEach((c) => {
+          c.classList.remove('active'); c.setAttribute('aria-selected', 'false');
+        });
+        card.classList.add('active'); card.setAttribute('aria-selected', 'true');
+        const d = card.dataset;
+        stage.style.setProperty('--bg', d.bg || '#000');
+        stage.style.setProperty('--text', d.text || '#fff');
+        stage.style.setProperty('--ac', d.ac || '#fff');
+        fx.setConfig({ type: d.effect as EffectType, colors: (d.colors || '').split(',') });
+      });
+    });
+  }
+</script>

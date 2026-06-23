@@ -1,14 +1,17 @@
 ---
 import { t, type Locale } from '@/i18n';
+import { getThemes } from '@/data/themes';
 const { locale } = Astro.props as { locale: Locale };
 const sloganZh = '专注写作，优雅表达';
 const sloganEn = 'Write beautifully, think clearly';
+// Curated hero chip set, covering varied effects.
+const chipIds = ['liuguang', 'ziye', 'degula', 'danfeng', 'shuangye', 'yingye'];
+const chips = chipIds.map((id) => getThemes().find((t) => t.id === id)!).filter(Boolean);
 ---
 <section id="hero" class="hero">
   <div class="ambient" aria-hidden="true">
-    <span class="orb orb-a"></span>
-    <span class="orb orb-b"></span>
-    <span class="orb orb-c"></span>
+    <canvas id="hero-fx" class="fx"></canvas>
+    <div class="veil"></div>
   </div>
 
   <div class="stage container">
@@ -21,6 +24,15 @@ const sloganEn = 'Write beautifully, think clearly';
     <div class="cta-row">
       <a class="cta" href="https://github.com/Leejaywell/Mox/releases/latest">{t(locale, 'nav.download')}</a>
       <a class="ghost" href="#themes">{locale === 'en' ? 'See the themes ↓' : '看看主题 ↓'}</a>
+    </div>
+
+    <div class="chips" role="group" aria-label={locale === 'en' ? 'Preview a theme' : '预览主题'}>
+      {chips.map((c, i) => (
+        <button class:list={["chip", { active: i === 0 }]} data-effect={c.effect}
+          data-colors={c.effectColors.join(',')} data-accent={c.palette.accent}
+          style={`--c:${c.palette.accent}`} title={c.name[locale] ?? c.name.zh}
+          aria-label={c.name[locale] ?? c.name.zh}></button>
+      ))}
     </div>
 
     <div class="editor" role="img" aria-label="Mox editor preview">
@@ -39,10 +51,8 @@ const sloganEn = 'Write beautifully, think clearly';
 <style>
   .hero { position: relative; overflow: hidden; min-height: 90vh; display: flex; align-items: center; }
   .ambient { position: absolute; inset: 0; z-index: 0; }
-  .orb { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .55; }
-  .orb-a { width: 420px; height: 420px; background: #7b5cff; top: -8%; left: 58%; }
-  .orb-b { width: 360px; height: 360px; background: #ff6ea9; top: 36%; left: 8%; }
-  .orb-c { width: 300px; height: 300px; background: #5b8cff; bottom: -10%; left: 40%; }
+  .fx { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .veil { position: absolute; inset: 0; background: radial-gradient(80% 60% at 50% 40%, transparent, color-mix(in srgb, var(--bg) 55%, transparent)); }
 
   .stage { position: relative; z-index: 1; text-align: center; display: flex; flex-direction: column; align-items: center; padding: 96px 24px 72px; }
 
@@ -52,7 +62,7 @@ const sloganEn = 'Write beautifully, think clearly';
   .slogan-zh { font-family: "Liu Jian Mao Cao", var(--serif); font-size: clamp(40px, 8vw, 84px); line-height: 1.1; letter-spacing: 2px; }
   .slogan-en { font-family: "Dancing Script", cursive; font-size: clamp(22px, 4vw, 40px); color: var(--muted); margin-top: 6px; }
 
-  .subtitle, .cta-row, .editor { opacity: 0; transform: translateY(12px); }
+  .subtitle, .cta-row, .chips, .editor { opacity: 0; transform: translateY(12px); }
   .subtitle { color: var(--muted); font-size: clamp(14px, 2.2vw, 18px); margin: 22px 0 0; max-width: 620px; }
   .cta-row { display: flex; gap: 14px; justify-content: center; align-items: center; margin-top: 28px; flex-wrap: wrap; }
   .cta { background: var(--accent); color: #fff; padding: 11px 26px; border-radius: 10px; font-weight: 500; }
@@ -60,12 +70,18 @@ const sloganEn = 'Write beautifully, think clearly';
   .ghost { color: var(--muted); padding: 11px 18px; border: 1px solid var(--hairline); border-radius: 10px; }
   .ghost:hover { color: var(--fg); }
 
-  .editor { width: min(680px, 92%); margin-top: 48px; border-radius: 14px;
+  .chips { display: flex; gap: 10px; justify-content: center; align-items: center; margin-top: 22px; }
+  .chip { width: 20px; height: 20px; border-radius: 50%; padding: 0; cursor: pointer;
+          background: var(--c); border: 2px solid transparent; outline: none; transition: transform .15s ease, border-color .15s ease; }
+  .chip:hover { transform: scale(1.15); }
+  .chip.active { border-color: color-mix(in srgb, var(--fg) 80%, transparent); transform: scale(1.15); }
+
+  .editor { width: min(680px, 92%); margin-top: 44px; border-radius: 14px;
             background: color-mix(in srgb, #ffffff 8%, transparent);
             border: 1px solid color-mix(in srgb, #ffffff 16%, transparent);
             backdrop-filter: blur(10px); box-shadow: 0 30px 80px rgba(0,0,0,.45); text-align: left; }
   .editor .bar { display: flex; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--hairline); }
-  .editor .bar span { width: 11px; height: 11px; border-radius: 50%; background: color-mix(in srgb, var(--fg) 28%, transparent); }
+  .editor .bar span { width: 11px; height: 11px; border-radius: 50%; }
   .editor .bar span:nth-child(1) { background: #ff5f57; }
   .editor .bar span:nth-child(2) { background: #febc2e; }
   .editor .bar span:nth-child(3) { background: #28c840; }
@@ -74,44 +90,57 @@ const sloganEn = 'Write beautifully, think clearly';
   .editor .ln.dim { color: var(--muted); }
   .editor .ln.code { font-family: ui-monospace, "SF Mono", monospace; color: var(--accent); }
 
-  /* reveal after handwriting completes (class toggled by the client script) */
   #hero.writing-done .slogan-zh { opacity: 1; clip-path: inset(0 0 0 0); transition: clip-path .9s ease, opacity .15s ease; }
   #hero.writing-done .slogan-en { opacity: 1; clip-path: inset(0 0 0 0); transition: clip-path .9s ease .55s, opacity .2s ease .55s; }
-  #hero.writing-done .subtitle { opacity: 1; transform: none; transition: all .5s ease 1.0s; }
-  #hero.writing-done .cta-row { opacity: 1; transform: none; transition: all .5s ease 1.2s; }
-  #hero.writing-done .editor { opacity: 1; transform: none; transition: all .7s cubic-bezier(.2,.7,.2,1) 1.35s; }
+  #hero.writing-done .subtitle { opacity: 1; transform: none; transition: all .5s ease .65s; }
+  #hero.writing-done .cta-row { opacity: 1; transform: none; transition: all .5s ease .82s; }
+  #hero.writing-done .chips { opacity: 1; transform: none; transition: all .5s ease .95s; }
+  #hero.writing-done .editor { opacity: 1; transform: none; transition: all .7s cubic-bezier(.2,.7,.2,1) 1.05s; }
 
-  @media (max-width: 640px) { .editor { margin-top: 36px; } .stage { padding-top: 72px; } }
+  @media (max-width: 640px) { .editor { margin-top: 32px; } .stage { padding-top: 72px; } }
 </style>
 
 <script>
   import HanziWriter from 'hanzi-writer';
   import moData from '@/data/mo-char.json';
+  import { AmbientEffect } from '@/effects/ambient';
+  import type { EffectType } from '@/data/themes.schema';
 
   const hero = document.getElementById('hero');
   const target = document.getElementById('mo-target');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const reveal = () => hero?.classList.add('writing-done');
 
+  // Ambient effect canvas (default = first chip's effect).
+  const canvas = document.getElementById('hero-fx') as HTMLCanvasElement | null;
+  let fx: AmbientEffect | null = null;
+  if (canvas) {
+    const first = document.querySelector<HTMLButtonElement>('.chip.active');
+    fx = new AmbientEffect(canvas, {
+      type: (first?.dataset.effect as EffectType) || 'orbs',
+      colors: (first?.dataset.colors || '#9b8cff,#ff8fb0,#5b8cff').split(','),
+    });
+    fx.start();
+  }
+
+  // Theme chips re-skin the hero effect + accent live.
+  document.querySelectorAll<HTMLButtonElement>('.chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.chip').forEach((c) => c.classList.remove('active'));
+      chip.classList.add('active');
+      fx?.setConfig({ type: chip.dataset.effect as EffectType, colors: (chip.dataset.colors || '').split(',') });
+      if (chip.dataset.accent) hero?.style.setProperty('--accent', chip.dataset.accent);
+    });
+  });
+
   if (target && hero) {
     const writer = HanziWriter.create(target, '墨', {
-      width: 130,
-      height: 130,
-      padding: 4,
-      showOutline: false,
-      showCharacter: false,
-      strokeColor: '#f3f0ea',
-      strokeAnimationSpeed: 1.4,
-      delayBetweenStrokes: 90,
+      width: 130, height: 130, padding: 4,
+      showOutline: false, showCharacter: false,
+      strokeColor: '#f3f0ea', strokeAnimationSpeed: 2.2, delayBetweenStrokes: 50,
       charDataLoader: (_char: string, onComplete: (d: unknown) => void) => onComplete(moData),
     });
-    if (reduce) {
-      writer.showCharacter();
-      reveal();
-    } else {
-      writer.animateCharacter({ onComplete: () => setTimeout(reveal, 150) });
-    }
-  } else {
-    reveal();
-  }
+    if (reduce) { writer.showCharacter(); reveal(); }
+    else { writer.animateCharacter({ onComplete: () => setTimeout(reveal, 150) }); }
+  } else { reveal(); }
 </script>
