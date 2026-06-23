@@ -25,6 +25,13 @@
         { "slug": "shortcuts", "title": "快捷键" },
         { "slug": "faq", "title": "常见问题" }
       ]
+    },
+    {
+      "group": "法律",
+      "items": [
+        { "slug": "privacy", "title": "隐私政策" },
+        { "slug": "terms", "title": "使用条款" }
+      ]
     }
   ],
   "en": [
@@ -52,6 +59,13 @@
       "items": [
         { "slug": "shortcuts", "title": "Shortcuts" },
         { "slug": "faq", "title": "FAQ" }
+      ]
+    },
+    {
+      "group": "Legal",
+      "items": [
+        { "slug": "privacy", "title": "Privacy Policy" },
+        { "slug": "terms", "title": "Terms of Use" }
       ]
     }
   ]

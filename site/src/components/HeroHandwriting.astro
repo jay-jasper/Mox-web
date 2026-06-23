@@ -38,13 +38,20 @@ const sub = isEn
   @keyframes cue { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 5px); } }
 
   .hand { margin: 0; }
-  .hand .zh { font-family: var(--hand-zh); font-size: clamp(48px, 7vw, 92px); line-height: 1.2; color: var(--fg); letter-spacing: 2px; }
+  .hand .zh { display: inline-block; font-family: var(--hand-zh); font-size: clamp(48px, 7vw, 92px); line-height: 1.2; color: var(--fg); letter-spacing: 2px; }
   .sub { color: var(--text); font-size: clamp(15px, 1.5vw, 18px); margin: 28px 0 0; max-width: 30em; }
   .cta-row { display: flex; gap: 14px; align-items: center; margin-top: 30px; flex-wrap: wrap; }
   .btn { background: var(--btn); color: var(--btn-fg); padding: 13px 30px; border-radius: 999px; font-weight: 700; font-size: 16px; }
   .btn:hover { filter: brightness(1.06); }
-  .ghost { padding: 13px 26px; border-radius: 999px; border: 1px solid var(--hairline); color: var(--fg); font-weight: 600; }
-  .ghost:hover { background: color-mix(in srgb, var(--fg) 5%, transparent); }
+
+  /* Entrance: the slogan "inks in" with a left→right wipe, then the rest fades up.
+     Gated by .anim (added by JS) so no-JS / reduced-motion shows the final state. */
+  .hero.anim .zh { clip-path: inset(0 100% 0 0); }
+  .hero.anim .sub, .hero.anim .cta-row, .hero.anim .editor-wrap { opacity: 0; transform: translateY(14px); }
+  .hero.anim.reveal .zh { clip-path: inset(0 0 0 0); transition: clip-path 1.15s cubic-bezier(.2,.7,.2,1); }
+  .hero.anim.reveal .sub { opacity: 1; transform: none; transition: opacity .6s ease .85s, transform .6s ease .85s; }
+  .hero.anim.reveal .cta-row { opacity: 1; transform: none; transition: opacity .6s ease 1.0s, transform .6s ease 1.0s; }
+  .hero.anim.reveal .editor-wrap { opacity: 1; transform: none; transition: opacity .8s ease .5s, transform .8s cubic-bezier(.2,.7,.2,1) .5s; }
 
   @media (max-width: 880px) {
     .grid { grid-template-columns: 1fr; gap: 36px; }
@@ -52,3 +59,12 @@ const sub = isEn
     .hero { padding: 40px 0; min-height: 0; }
   }
 </style>
+
+<script>
+  const hero = document.getElementById('hero');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (hero && !reduce) {
+    hero.classList.add('anim');
+    requestAnimationFrame(() => requestAnimationFrame(() => hero.classList.add('reveal')));
+  }
+</script>
