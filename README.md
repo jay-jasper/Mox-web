@@ -1,8 +1,8 @@
 # Mox Web
 
-The website and documentation for **Mox** — a Typora-style native macOS WYSIWYG Markdown editor.
+The website and documentation for **Mox** — a native macOS WYSIWYG Markdown editor.
 
-This repository is managed as a git submodule of the main [Mox](https://github.com/Leejaywell/Mox) repo, mounted at `website/`.
+This repository is managed as a git submodule of the main Mox repo, mounted at `website/`.
 
 ## Structure
 
