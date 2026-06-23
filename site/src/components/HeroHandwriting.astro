@@ -4,6 +4,7 @@ import LiveEditor from '@/components/LiveEditor.astro';
 const { locale } = Astro.props as { locale: Locale };
 const isEn = locale === 'en';
 const zh = '专注写作 优雅表达';
+const chars = [...zh]; // per-character spans so the slogan can "write" itself in sequence
 const sub = isEn
   ? 'A quiet writing space for macOS. WYSIWYG and natively fast — just you and the words.'
   : '一个安静的 macOS 写作空间。所见即所得，原生流畅，让你只与文字相处。';
@@ -11,7 +12,9 @@ const sub = isEn
 <section id="hero" class="hero">
   <div class="container grid">
     <div class="lead">
-      <h1 class="hand"><span class="zh">{zh}</span></h1>
+      <h1 class="hand" aria-label={zh}>{chars.map((c, i) => (
+        c === ' ' ? <span class="sp"> </span> : <span class="ch" style={`--i:${i}`} aria-hidden="true">{c}</span>
+      ))}</h1>
       <p class="sub">{sub}</p>
       <div class="cta-row">
         <a class="btn" href="#download">{t(locale, 'nav.download')}</a>
@@ -37,21 +40,32 @@ const sub = isEn
   .scroll-cue:hover { color: var(--fg); }
   @keyframes cue { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 5px); } }
 
-  .hand { margin: 0; }
-  .hand .zh { display: inline-block; font-family: var(--hand-zh); font-size: clamp(48px, 7vw, 92px); line-height: 1.2; color: var(--fg); letter-spacing: 2px; }
+  .hand { margin: 0; font-family: var(--hand-zh); font-size: clamp(48px, 7vw, 92px); line-height: 1.2; color: var(--fg); letter-spacing: 2px; }
+  .hand .ch { display: inline-block; }
+  .hand .sp { display: inline-block; width: 0.4em; }
   .sub { color: var(--text); font-size: clamp(15px, 1.5vw, 18px); margin: 28px 0 0; max-width: 30em; }
   .cta-row { display: flex; gap: 14px; align-items: center; margin-top: 30px; flex-wrap: wrap; }
   .btn { background: var(--btn); color: var(--btn-fg); padding: 13px 30px; border-radius: 999px; font-weight: 700; font-size: 16px; }
   .btn:hover { filter: brightness(1.06); }
 
-  /* Entrance: the slogan "inks in" with a left→right wipe, then the rest fades up.
-     Gated by .anim (added by JS) so no-JS / reduced-motion shows the final state. */
-  .hero.anim .zh { clip-path: inset(0 100% 0 0); }
-  .hero.anim .sub, .hero.anim .cta-row, .hero.anim .editor-wrap { opacity: 0; transform: translateY(14px); }
-  .hero.anim.reveal .zh { clip-path: inset(0 0 0 0); transition: clip-path 1.15s cubic-bezier(.2,.7,.2,1); }
-  .hero.anim.reveal .sub { opacity: 1; transform: none; transition: opacity .6s ease .85s, transform .6s ease .85s; }
-  .hero.anim.reveal .cta-row { opacity: 1; transform: none; transition: opacity .6s ease 1.0s, transform .6s ease 1.0s; }
-  .hero.anim.reveal .editor-wrap { opacity: 1; transform: none; transition: opacity .8s ease .5s, transform .8s cubic-bezier(.2,.7,.2,1) .5s; }
+  /* Entrance: write the slogan CENTERED (char by char), then glide it to its left resting
+     spot and reveal the banner. Initial-hidden state is gated on html.js + no-preference so
+     no-JS / reduced-motion show the final banner immediately. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .hero .ch { opacity: 0; }
+    :global(html.js) .hero .sub, :global(html.js) .hero .cta-row, :global(html.js) .hero .editor-wrap { opacity: 0; transform: translateY(14px); }
+
+    .hero.intro .hand { transform: translate(var(--tx, 0), var(--ty, 0)) scale(var(--sc, 1)); transform-origin: left center; will-change: transform; }
+    .hero.intro.writing .ch { animation: inkIn .42s cubic-bezier(.22,.61,.36,1) both; animation-delay: calc(var(--i) * 0.16s); }
+    .hero.intro.settled .hand { transform: none; transition: transform 1s cubic-bezier(.6,0,.2,1); }
+    .hero.intro.settled .sub { opacity: 1; transform: none; transition: opacity .6s ease .55s, transform .6s ease .55s; }
+    .hero.intro.settled .cta-row { opacity: 1; transform: none; transition: opacity .6s ease .7s, transform .6s ease .7s; }
+    .hero.intro.settled .editor-wrap { opacity: 1; transform: none; transition: opacity .85s ease .5s, transform .85s cubic-bezier(.2,.7,.2,1) .5s; }
+  }
+  @keyframes inkIn {
+    from { opacity: 0; clip-path: inset(-12% 110% -12% -12%); transform: translateY(0.12em) rotate(-3deg); }
+    to   { opacity: 1; clip-path: inset(-12% -12% -12% -12%); transform: none; }
+  }
 
   @media (max-width: 880px) {
     .grid { grid-template-columns: 1fr; gap: 36px; }
@@ -62,9 +76,22 @@ const sub = isEn
 
 <script>
   const hero = document.getElementById('hero');
+  const hand = hero?.querySelector('.hand') as HTMLElement | null;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (hero && !reduce) {
-    hero.classList.add('anim');
-    requestAnimationFrame(() => requestAnimationFrame(() => hero.classList.add('reveal')));
+  if (hero && hand && !reduce) {
+    const wide = window.innerWidth >= 880;
+    if (wide) {
+      // FLIP: measure the slogan's resting (left) position, then offset it to screen centre.
+      const r = hand.getBoundingClientRect();
+      const navH = 60;
+      hero.style.setProperty('--tx', (window.innerWidth / 2 - (r.left + r.width / 2)) + 'px');
+      hero.style.setProperty('--ty', ((navH + (window.innerHeight - navH) / 2) - (r.top + r.height / 2)) + 'px');
+      hero.style.setProperty('--sc', '1.1');
+    }
+    hero.classList.add('intro');
+    requestAnimationFrame(() => requestAnimationFrame(() => hero.classList.add('writing')));
+    const n = hand.querySelectorAll('.ch').length;
+    const writeMs = n * 160 + 450;
+    window.setTimeout(() => hero.classList.add('settled'), writeMs + (wide ? 500 : 0));
   }
 </script>

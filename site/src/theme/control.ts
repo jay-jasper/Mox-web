@@ -16,7 +16,13 @@ export function applyTheme(id: string) {
   document.documentElement.style.colorScheme = th.dark ? 'dark' : 'light';
   fx?.setConfig({ type: th.effect, colors: th.effectColors });
   fx?.start();
-  try { localStorage.setItem(KEY, id); } catch {}
+  try {
+    localStorage.setItem(KEY, id);
+    // Persisted for the inline head script to restore the palette pre-paint (no FOUC).
+    localStorage.setItem('mox.theme.css', JSON.stringify({
+      bg: th.palette.bg, fg: th.palette.text, accent: th.palette.accent, dark: th.dark,
+    }));
+  } catch {}
   document.querySelectorAll<HTMLElement>('[data-theme-id]').forEach((el) =>
     el.classList.toggle('on', el.dataset.themeId === id));
 }

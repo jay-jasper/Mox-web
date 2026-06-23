@@ -21,6 +21,19 @@ const enHref = new URL(base + enRel, Astro.site).href;
 <!doctype html>
 <html lang={locale === 'en' ? 'en' : 'zh'}>
   <head>
+    <script is:inline>
+      // Mark JS-on, and restore the saved theme palette BEFORE first paint (no FOUC of the
+      // default theme when navigating between pages). Inline style on <html> beats the CSS :root.
+      document.documentElement.classList.add('js');
+      try {
+        var v = JSON.parse(localStorage.getItem('mox.theme.css') || 'null');
+        if (v) {
+          var s = document.documentElement.style;
+          s.setProperty('--bg', v.bg); s.setProperty('--fg', v.fg); s.setProperty('--accent', v.accent);
+          s.colorScheme = v.dark ? 'dark' : 'light';
+        }
+      } catch (e) {}
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
