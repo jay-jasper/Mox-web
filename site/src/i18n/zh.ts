@@ -4,6 +4,7 @@ export const zh = {
   'nav.docs': '文档',
   'nav.changelog': '更新日志',
   'nav.timeline': '时间线',
+  'nav.faq': '常见问题',
   'nav.download': '下载',
   'hero.title': '专注写作，优雅表达',
   'hero.subtitle': '原生 macOS · 所见即所得 Markdown · 20 主题与动态特效',

@@ -8,6 +8,7 @@ const home = withBase(isEn ? '/en/' : '/');
 const features = home + '#features';
 const download = home + '#download';
 const docs = withBase('/docs') + (isEn ? '#/en/getting-started' : '');
+const faq = withBase('/docs') + (isEn ? '#/en/faq' : '#/zh/faq');
 const timeline = withBase(isEn ? '/en/timeline' : '/timeline');
 ---
 <nav class="nav">
@@ -21,6 +22,7 @@ const timeline = withBase(isEn ? '/en/timeline' : '/timeline');
       <a href={download}>{t(locale, 'nav.download')}</a>
       <a href={docs}>{t(locale, 'nav.docs')}</a>
       <a href={timeline}>{t(locale, 'nav.timeline')}</a>
+      <a href={faq}>{t(locale, 'nav.faq')}</a>
     </div>
 
     <div class="right">
