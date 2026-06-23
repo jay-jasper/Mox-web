@@ -1,28 +1,13 @@
 ---
 import Base from '@/layouts/Base.astro';
-import { t } from '@/i18n';
+import HeroHandwriting from '@/components/HeroHandwriting.astro';
 ---
 <Base title="Mox — Write beautifully, think clearly" description="A native macOS WYSIWYG Markdown editor with 20 themes and live effects">
-  <section class="hero container">
-    <h1>{t('en', 'hero.title')}</h1>
-    <p class="sub">{t('en', 'hero.subtitle')}</p>
-    <div class="cta-row">
-      <a class="cta" href="https://github.com/Leejaywell/Mox/releases/latest">{t('en', 'nav.download')}</a>
-      <a class="ghost" href="#themes">See the themes ↓</a>
-    </div>
-  </section>
-  <section id="features" class="container section"><h2>Features</h2><p class="muted">(feature narrative — Plan 4)</p></section>
-  <section id="themes" class="container section"><h2>Themes</h2><p class="muted">(theme gallery — Plan 3)</p></section>
+  <HeroHandwriting locale="en" />
+  <section id="features" class="container section"><h2>Features</h2><p class="muted">(feature narrative — M4)</p></section>
+  <section id="themes" class="container section"><h2>Themes</h2><p class="muted">(theme gallery — M3)</p></section>
 </Base>
 <style>
-  .hero { padding: 128px 24px 72px; text-align: center; }
-  .hero h1 { font-size: clamp(34px, 6vw, 56px); margin: 0 0 14px; line-height: 1.15; }
-  .sub { color: var(--muted); font-size: clamp(15px, 2.4vw, 19px); margin: 0 auto; max-width: 640px; }
-  .cta-row { display: flex; gap: 14px; justify-content: center; align-items: center; margin-top: 28px; flex-wrap: wrap; }
-  .cta { background: var(--accent); color: #fff; padding: 11px 24px; border-radius: 10px; font-weight: 500; }
-  .cta:hover { filter: brightness(1.08); }
-  .ghost { color: var(--muted); padding: 11px 18px; border: 1px solid var(--hairline); border-radius: 10px; }
-  .ghost:hover { color: var(--fg); }
   .section { padding: 48px 24px; }
   .muted { color: var(--muted); }
 </style>

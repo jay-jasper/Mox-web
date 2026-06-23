@@ -1,0 +1,117 @@
+---
+import { t, type Locale } from '@/i18n';
+const { locale } = Astro.props as { locale: Locale };
+const sloganZh = '专注写作，优雅表达';
+const sloganEn = 'Write beautifully, think clearly';
+---
+<section id="hero" class="hero">
+  <div class="ambient" aria-hidden="true">
+    <span class="orb orb-a"></span>
+    <span class="orb orb-b"></span>
+    <span class="orb orb-c"></span>
+  </div>
+
+  <div class="stage container">
+    <div id="mo-target" class="mo" aria-label="墨"></div>
+
+    <h1 class="slogan slogan-zh">{sloganZh}</h1>
+    <p class="slogan slogan-en">{sloganEn}</p>
+    <p class="subtitle">{t(locale, 'hero.subtitle')}</p>
+
+    <div class="cta-row">
+      <a class="cta" href="https://github.com/Leejaywell/Mox/releases/latest">{t(locale, 'nav.download')}</a>
+      <a class="ghost" href="#themes">{locale === 'en' ? 'See the themes ↓' : '看看主题 ↓'}</a>
+    </div>
+
+    <div class="editor" role="img" aria-label="Mox editor preview">
+      <div class="bar"><span></span><span></span><span></span></div>
+      <div class="doc">
+        <div class="ln h">## {locale === 'en' ? 'Today' : '今天'}</div>
+        <div class="ln">{locale === 'en' ? 'Write the first line, the rest will follow.' : '写下第一行，余下的自会跟来。'}</div>
+        <div class="ln dim">- [x] {locale === 'en' ? 'focus' : '专注'}</div>
+        <div class="ln dim">- [ ] {locale === 'en' ? 'express' : '表达'}</div>
+        <div class="ln code">`mox()`</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { position: relative; overflow: hidden; min-height: 90vh; display: flex; align-items: center; }
+  .ambient { position: absolute; inset: 0; z-index: 0; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .55; }
+  .orb-a { width: 420px; height: 420px; background: #7b5cff; top: -8%; left: 58%; }
+  .orb-b { width: 360px; height: 360px; background: #ff6ea9; top: 36%; left: 8%; }
+  .orb-c { width: 300px; height: 300px; background: #5b8cff; bottom: -10%; left: 40%; }
+
+  .stage { position: relative; z-index: 1; text-align: center; display: flex; flex-direction: column; align-items: center; padding: 96px 24px 72px; }
+
+  .mo { width: 130px; height: 130px; margin-bottom: 8px; }
+
+  .slogan { margin: 0; clip-path: inset(0 100% 0 0); opacity: 0; }
+  .slogan-zh { font-family: "Liu Jian Mao Cao", var(--serif); font-size: clamp(40px, 8vw, 84px); line-height: 1.1; letter-spacing: 2px; }
+  .slogan-en { font-family: "Dancing Script", cursive; font-size: clamp(22px, 4vw, 40px); color: var(--muted); margin-top: 6px; }
+
+  .subtitle, .cta-row, .editor { opacity: 0; transform: translateY(12px); }
+  .subtitle { color: var(--muted); font-size: clamp(14px, 2.2vw, 18px); margin: 22px 0 0; max-width: 620px; }
+  .cta-row { display: flex; gap: 14px; justify-content: center; align-items: center; margin-top: 28px; flex-wrap: wrap; }
+  .cta { background: var(--accent); color: #fff; padding: 11px 26px; border-radius: 10px; font-weight: 500; }
+  .cta:hover { filter: brightness(1.08); }
+  .ghost { color: var(--muted); padding: 11px 18px; border: 1px solid var(--hairline); border-radius: 10px; }
+  .ghost:hover { color: var(--fg); }
+
+  .editor { width: min(680px, 92%); margin-top: 48px; border-radius: 14px;
+            background: color-mix(in srgb, #ffffff 8%, transparent);
+            border: 1px solid color-mix(in srgb, #ffffff 16%, transparent);
+            backdrop-filter: blur(10px); box-shadow: 0 30px 80px rgba(0,0,0,.45); text-align: left; }
+  .editor .bar { display: flex; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--hairline); }
+  .editor .bar span { width: 11px; height: 11px; border-radius: 50%; background: color-mix(in srgb, var(--fg) 28%, transparent); }
+  .editor .bar span:nth-child(1) { background: #ff5f57; }
+  .editor .bar span:nth-child(2) { background: #febc2e; }
+  .editor .bar span:nth-child(3) { background: #28c840; }
+  .editor .doc { padding: 20px 24px 26px; font-size: 15px; line-height: 1.9; }
+  .editor .ln.h { font-family: var(--serif); font-size: 20px; }
+  .editor .ln.dim { color: var(--muted); }
+  .editor .ln.code { font-family: ui-monospace, "SF Mono", monospace; color: var(--accent); }
+
+  /* reveal after handwriting completes (class toggled by the client script) */
+  #hero.writing-done .slogan-zh { opacity: 1; clip-path: inset(0 0 0 0); transition: clip-path .9s ease, opacity .15s ease; }
+  #hero.writing-done .slogan-en { opacity: 1; clip-path: inset(0 0 0 0); transition: clip-path .9s ease .55s, opacity .2s ease .55s; }
+  #hero.writing-done .subtitle { opacity: 1; transform: none; transition: all .5s ease 1.0s; }
+  #hero.writing-done .cta-row { opacity: 1; transform: none; transition: all .5s ease 1.2s; }
+  #hero.writing-done .editor { opacity: 1; transform: none; transition: all .7s cubic-bezier(.2,.7,.2,1) 1.35s; }
+
+  @media (max-width: 640px) { .editor { margin-top: 36px; } .stage { padding-top: 72px; } }
+</style>
+
+<script>
+  import HanziWriter from 'hanzi-writer';
+  import moData from '@/data/mo-char.json';
+
+  const hero = document.getElementById('hero');
+  const target = document.getElementById('mo-target');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reveal = () => hero?.classList.add('writing-done');
+
+  if (target && hero) {
+    const writer = HanziWriter.create(target, '墨', {
+      width: 130,
+      height: 130,
+      padding: 4,
+      showOutline: false,
+      showCharacter: false,
+      strokeColor: '#f3f0ea',
+      strokeAnimationSpeed: 1.4,
+      delayBetweenStrokes: 90,
+      charDataLoader: (_char: string, onComplete: (d: unknown) => void) => onComplete(moData),
+    });
+    if (reduce) {
+      writer.showCharacter();
+      reveal();
+    } else {
+      writer.animateCharacter({ onComplete: () => setTimeout(reveal, 150) });
+    }
+  } else {
+    reveal();
+  }
+</script>

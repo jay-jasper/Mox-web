@@ -16,6 +16,12 @@ const locale = localeFromPath(Astro.url.pathname);
     <meta property="og:title" content={title} />
     {description && <meta property="og:description" content={description} />}
     <meta name="theme-color" content="#0c0a18" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Liu+Jian+Mao+Cao&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <Nav locale={locale} />

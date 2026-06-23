@@ -17,7 +17,7 @@ for (const p of paths) {
   for (const { tag, w, h } of widths) {
     const page = await browser.newPage({ viewport: { width: w, height: h }, deviceScaleFactor: 2 });
     await page.goto(base + p, { waitUntil: 'networkidle' });
-    await page.waitForTimeout(600); // let fonts/animations settle
+    await page.waitForTimeout(Number(process.env.WAIT) || 600); // let fonts/animations settle
     const name = (p.replace(/[\/]/g, '_') || 'root') + `_${tag}.png`;
     await page.screenshot({ path: `${outDir}/${name}`, fullPage: true });
     console.log('shot', name);
