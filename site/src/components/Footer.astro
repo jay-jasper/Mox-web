@@ -11,7 +11,6 @@ const docs = withBase('/docs') + (locale === 'en' ? '#/en/getting-started' : '')
     <div class="cols">
       <a href="#features">{t(locale, 'footer.product')}</a>
       <a href={docs}>{t(locale, 'nav.docs')}</a>
-      <a href="https://github.com/Leejaywell/Mox">GitHub</a>
       <a href={other}>{locale === 'en' ? '中文' : 'EN'}</a>
     </div>
   </div>

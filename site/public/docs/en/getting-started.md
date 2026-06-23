@@ -4,7 +4,7 @@ Welcome to **Mox** — a WYSIWYG Markdown editor built for macOS. Markers slip a
 
 ## Install
 
-1. Download the latest build from [GitHub Releases](https://github.com/Leejaywell/Mox/releases/latest).
+1. Get the latest build from the download section (launching soon).
 2. Open the `.dmg` and drag Mox into Applications.
 3. On first launch, if macOS warns about an unidentified developer, choose "Open Anyway" in System Settings › Privacy & Security.
 
