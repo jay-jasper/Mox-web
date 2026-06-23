@@ -1,8 +1,11 @@
 ---
 import { t, type Locale } from '@/i18n';
+import { withBase } from '@/lib/url';
 const { locale } = Astro.props as { locale: Locale };
-const home = locale === 'en' ? '/en' : '/';
+const home = withBase(locale === 'en' ? '/en' : '/');
 const isEn = locale === 'en';
+const docs = withBase('/docs') + (isEn ? '#/en/getting-started' : '');
+const timeline = withBase(locale === 'en' ? '/en/timeline' : '/timeline');
 ---
 <nav class="nav">
   <div class="container nav-inner">
@@ -13,14 +16,14 @@ const isEn = locale === 'en';
     <div class="links">
       <a href="#features">{t(locale, 'nav.features')}</a>
       <a href="#download">{t(locale, 'nav.download')}</a>
-      <a href="/docs">{t(locale, 'nav.docs')}</a>
-      <a href="https://github.com/Leejaywell/Mox">{t(locale, 'nav.roadmap')}</a>
+      <a href={docs}>{t(locale, 'nav.docs')}</a>
+      <a href={timeline}>{t(locale, 'nav.timeline')}</a>
     </div>
 
     <div class="right">
       <div class="seg" role="group" aria-label="Language">
-        <a class:list={["s", { on: !isEn }]} href="/">中</a>
-        <a class:list={["s", { on: isEn }]} href="/en">EN</a>
+        <a class:list={["s", { on: !isEn }]} href={withBase('/')}>中</a>
+        <a class:list={["s", { on: isEn }]} href={withBase('/en')}>EN</a>
       </div>
       <button id="theme-open" class="theme-btn" aria-label={t(locale, 'nav.themes')}>
         <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1-.24-.27-.39-.62-.39-1 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8m-5.5 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m3-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m3 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/></svg>

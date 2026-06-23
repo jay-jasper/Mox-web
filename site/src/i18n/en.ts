@@ -5,7 +5,7 @@ export const en: Partial<Record<StringKey, string>> = {
   'nav.themes': 'Themes',
   'nav.docs': 'Docs',
   'nav.changelog': 'Changelog',
-  'nav.roadmap': 'Roadmap',
+  'nav.timeline': 'Timeline',
   'nav.download': 'Download',
   'hero.title': 'Write beautifully, think clearly',
   'hero.subtitle': 'Native macOS · WYSIWYG Markdown · 20 themes with live effects',

@@ -3,19 +3,27 @@ import '@/styles/global.css';
 import Nav from '@/components/Nav.astro';
 import Footer from '@/components/Footer.astro';
 import ThemePanel from '@/components/ThemePanel.astro';
-import { localeFromPath } from '@/i18n';
+import { withBase } from '@/lib/url';
+import type { Locale } from '@/i18n';
 const { title, description } = Astro.props as { title: string; description?: string };
-const locale = localeFromPath(Astro.url.pathname);
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const zhHref = new URL(Astro.url.pathname.replace(/^\/en\/?/, '/'), Astro.site).href;
-const enPath = Astro.url.pathname.startsWith('/en') ? Astro.url.pathname : '/en' + (Astro.url.pathname === '/' ? '' : Astro.url.pathname);
-const enHref = new URL(enPath, Astro.site).href;
+// Locale + canonical/hreflang computed RELATIVE TO THE BASE PATH (e.g. "/Mox-web/"),
+// so they're correct both locally and on a GitHub Pages project page.
+const base = import.meta.env.BASE_URL;
+const rel = Astro.url.pathname.slice(base.length).replace(/^\//, ''); // '' | 'en' | 'timeline' | 'en/timeline' | 'docs'
+const isEn = rel === 'en' || rel.startsWith('en/');
+const locale: Locale = isEn ? 'en' : 'zh';
+const zhRel = isEn ? rel.replace(/^en\/?/, '') : rel;
+const enRel = isEn ? rel : 'en' + (rel ? '/' + rel : '');
+const canonical = new URL(base + rel, Astro.site).href;
+const zhHref = new URL(base + zhRel, Astro.site).href;
+const enHref = new URL(base + enRel, Astro.site).href;
 ---
 <!doctype html>
 <html lang={locale === 'en' ? 'en' : 'zh'}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={canonical} />

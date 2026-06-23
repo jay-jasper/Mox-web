@@ -1,0 +1,66 @@
+---
+import type { Locale } from '@/i18n';
+const { locale } = Astro.props as { locale: Locale };
+const L = (zh: string, en: string) => (locale === 'en' ? en : zh);
+
+interface Entry { date: string; t: string; d: string; }
+// Curated from the project's commit history (2026-05-28 → present), newest first.
+const entries: Entry[] = [
+  { date: '2026-06-23', t: L('速记增强', 'Quick Notes, refined'),
+    d: L('钉在屏幕、居中生成、贴边握柄、管理面板删除，以及菜单栏速记列表。', 'Pin to screen, centered spawn, edge handle, delete from the manager, and a menu-bar notes list.') },
+  { date: '2026-06-22', t: L('速记上线', 'Quick Notes ship'),
+    d: L('浮动便签、存到桌面、停靠抽屉、全局快捷键 ⌥⌘N、便签管理器，全部到位。', 'Floating sticky notes, save-to-Desktop, edge-dock drawers, the ⌥⌘N global hotkey, and a notes manager.') },
+  { date: '2026-06-22', t: L('菜单栏常驻代理', 'Resident menu-bar agent'),
+    d: L('关闭主窗口或 ⌘Q 后，应用退居菜单栏，速记与快捷键随时可用。', 'Closing the window or ⌘Q retreats the app to the menu bar; notes and shortcuts stay available.') },
+  { date: '2026-06-22', t: L('导出详细设置', 'Rich export settings'),
+    d: L('分格式的导出设置面板、导出时即时覆盖与实时预览。', 'Per-format export panels with on-the-fly overrides and live preview.') },
+  { date: '2026-06-21', t: L('内联嵌入编辑 · 简历工坊重做', 'Inline embeds · Resume Studio rework'),
+    d: L('行内嵌入源码编辑，简历工坊重做，设置与主题打磨。', 'Edit embedded blocks inline, a reworked Resume Studio, and settings/theme polish.') },
+  { date: '2026-06-20', t: L('编辑器大跃进', 'Editor leap'),
+    d: L('命令面板、斜杠菜单分组、强调色预设、设置/面板动画与排版层级。', 'Command palette, grouped slash menu, accent presets, animated panels and tighter hierarchy.') },
+  { date: '2026-06-19', t: L('查找替换 · 表格 · 导入导出', 'Find/replace · tables · import-export'),
+    d: L('查找替换、表格增强、Markdown 导入导出，知识图谱新增节点类型。', 'Find & replace, richer tables, Markdown import/export, and new knowledge-graph node kinds.') },
+  { date: '2026-06-18', t: L('自包含数学 · AI 补全', 'Self-contained math · AI completion'),
+    d: L('公式渲染为图、离线自足；富文本复制、正则查找、AI 幽灵补全。', 'Math rendered to images and fully offline; copy as rich text, regex find, and AI ghost completion.') },
+  { date: '2026-06-17', t: L('折叠 · 拖拽重排 · 上下标', 'Folding · drag-reorder · sub/superscript'),
+    d: L('可折叠标题、块拖拽重排、上下标，以及斜杠菜单里的 AI 动作。', 'Collapsible headings, drag-to-reorder blocks, super/subscript, and AI actions in the slash menu.') },
+  { date: '2026-05-28', t: L('项目启动', 'Project begins'),
+    d: L('Mox 内核成型：Markdown 解析、文档模型、工作区文件树、撤销重做、全文搜索。', 'The Mox core takes shape: Markdown parsing, document model, workspace file tree, undo/redo, full-text search.') },
+];
+---
+<section class="tl">
+  <div class="container">
+    <h1 class="tl-title">{L('时间线', 'Timeline')}</h1>
+    <p class="tl-sub">{L('Mox 的成长，按提交历史一路记录。', "Mox's growth, traced through its commit history.")}</p>
+
+    <ol class="line">
+      {entries.map((e) => (
+        <li class="node" data-reveal>
+          <div class="dot"></div>
+          <time class="date">{e.date}</time>
+          <h3 class="t">{e.t}</h3>
+          <p class="d">{e.d}</p>
+        </li>
+      ))}
+    </ol>
+
+    <p class="tl-foot">{L('持续打磨中 —— 更多更新见 ', 'Still evolving — see more on ')}<a href="https://github.com/Leejaywell/Mox">GitHub</a>。</p>
+  </div>
+</section>
+
+<style>
+  .tl { padding: 64px 0 96px; }
+  .tl-title { font-size: clamp(32px, 5vw, 52px); margin: 0 0 8px; }
+  .tl-sub { color: var(--muted); margin: 0 0 48px; }
+  .line { list-style: none; margin: 0; padding: 0; position: relative; max-width: 720px; }
+  .line::before { content: ""; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 2px;
+    background: linear-gradient(var(--accent), color-mix(in srgb, var(--accent) 20%, transparent)); }
+  .node { position: relative; padding: 0 0 32px 36px; }
+  .dot { position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--bg); border: 3px solid var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent); }
+  .date { font-size: 13px; font-weight: 600; color: var(--accent); letter-spacing: .04em; }
+  .node .t { font-size: 19px; margin: 6px 0 6px; }
+  .node .d { color: var(--text); margin: 0; line-height: 1.7; }
+  .tl-foot { color: var(--muted); margin-top: 12px; }
+  .tl-foot a { color: var(--accent); }
+</style>

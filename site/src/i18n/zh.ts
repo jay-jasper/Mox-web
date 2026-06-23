@@ -3,7 +3,7 @@ export const zh = {
   'nav.themes': '主题',
   'nav.docs': '文档',
   'nav.changelog': '更新日志',
-  'nav.roadmap': '路线图',
+  'nav.timeline': '时间线',
   'nav.download': '下载',
   'hero.title': '专注写作，优雅表达',
   'hero.subtitle': '原生 macOS · 所见即所得 Markdown · 20 主题与动态特效',
