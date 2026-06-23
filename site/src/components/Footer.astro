@@ -3,13 +3,14 @@ import { t, type Locale } from '@/i18n';
 import { withBase } from '@/lib/url';
 const { locale } = Astro.props as { locale: Locale };
 const other = withBase(locale === 'en' ? '/' : '/en');
+const home = withBase(locale === 'en' ? '/en/' : '/');
 const docs = withBase('/docs') + (locale === 'en' ? '#/en/getting-started' : '');
 ---
 <footer class="footer">
   <div class="container foot-inner">
     <span class="brand">墨 Mox</span>
     <div class="cols">
-      <a href="#features">{t(locale, 'footer.product')}</a>
+      <a href={home + '#features'}>{t(locale, 'footer.product')}</a>
       <a href={docs}>{t(locale, 'nav.docs')}</a>
       <a href={other}>{locale === 'en' ? '中文' : 'EN'}</a>
     </div>

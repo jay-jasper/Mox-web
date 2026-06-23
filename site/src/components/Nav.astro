@@ -2,10 +2,13 @@
 import { t, type Locale } from '@/i18n';
 import { withBase } from '@/lib/url';
 const { locale } = Astro.props as { locale: Locale };
-const home = withBase(locale === 'en' ? '/en' : '/');
 const isEn = locale === 'en';
+const home = withBase(isEn ? '/en/' : '/');
+// 功能/下载 are sections on the HOME page, so link to home + hash (works from any page).
+const features = home + '#features';
+const download = home + '#download';
 const docs = withBase('/docs') + (isEn ? '#/en/getting-started' : '');
-const timeline = withBase(locale === 'en' ? '/en/timeline' : '/timeline');
+const timeline = withBase(isEn ? '/en/timeline' : '/timeline');
 ---
 <nav class="nav">
   <div class="container nav-inner">
@@ -14,8 +17,8 @@ const timeline = withBase(locale === 'en' ? '/en/timeline' : '/timeline');
     </a>
 
     <div class="links">
-      <a href="#features">{t(locale, 'nav.features')}</a>
-      <a href="#download">{t(locale, 'nav.download')}</a>
+      <a href={features}>{t(locale, 'nav.features')}</a>
+      <a href={download}>{t(locale, 'nav.download')}</a>
       <a href={docs}>{t(locale, 'nav.docs')}</a>
       <a href={timeline}>{t(locale, 'nav.timeline')}</a>
     </div>
