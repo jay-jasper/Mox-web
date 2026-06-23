@@ -6,6 +6,19 @@ import { AmbientEffect } from '@/effects/ambient';
 const KEY = 'mox.theme';
 let fx: AmbientEffect | null = null;
 
+// Theme ids were renamed mid-project to match the app; migrate old saved ids so a
+// previously-chosen theme still resolves (otherwise it silently fell back to the default).
+const ALIAS: Record<string, string> = {
+  dongwudao: 'island', yinghuadao: 'island-sakura', xuedao: 'island-snow',
+  liuguang: 'liquidglass', zihai: 'prism', jiqing: 'shuimo', japandi: 'rixi',
+  dai: 'studio', ziye: 'midnight', degula: 'dracula', luohuo: 'onedark',
+  shuangye: 'chuxue', feiye: 'waifu', danfeng: 'redmaple', mo: 'ink', zhu: 'bamboo',
+};
+function resolveId(id: string | null): string | null {
+  if (!id) return null;
+  return ALIAS[id] || id;
+}
+
 export function applyTheme(id: string) {
   const th = getTheme(id);
   if (!th) return;
@@ -31,6 +44,7 @@ export function initTheme() {
   const canvas = document.getElementById('site-fx') as HTMLCanvasElement | null;
   let saved: string | null = null;
   try { saved = localStorage.getItem(KEY); } catch {}
+  saved = resolveId(saved); // migrate any old/renamed id
   // Default theme is 绯夜 (waifu) unless the user picked one before.
   const th = (saved ? getTheme(saved) : undefined) || getTheme('waifu');
 
