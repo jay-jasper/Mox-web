@@ -27,5 +27,14 @@ const locale = localeFromPath(Astro.url.pathname);
     <Nav locale={locale} />
     <main><slot /></main>
     <Footer locale={locale} />
+    <script>
+      // Scroll-reveal: fade/slide elements in as they enter the viewport, once.
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        }
+      }, { threshold: 0.15 });
+      document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+    </script>
   </body>
 </html>

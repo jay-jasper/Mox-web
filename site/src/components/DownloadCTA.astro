@@ -1,0 +1,24 @@
+---
+import { t, type Locale } from '@/i18n';
+const { locale } = Astro.props as { locale: Locale };
+const L = (zh: string, en: string) => (locale === 'en' ? en : zh);
+---
+<section class="cta-band">
+  <div class="container" data-reveal>
+    <h2>{L('现在开始，优雅书写', 'Start writing, beautifully')}</h2>
+    <p>{L('免费下载，原生 macOS 体验。', 'Free download. A truly native macOS experience.')}</p>
+    <a class="cta" href="https://github.com/Leejaywell/Mox/releases/latest">{t(locale, 'nav.download')}</a>
+    <p class="req">{L('需要 macOS 13 或更高版本', 'Requires macOS 13 or later')}</p>
+  </div>
+</section>
+<style>
+  .cta-band { padding: 96px 0; text-align: center; }
+  .cta-band .container { border-radius: 22px; padding: 64px 24px;
+    background: linear-gradient(150deg, color-mix(in srgb, var(--accent) 22%, transparent), color-mix(in srgb, #ffffff 5%, transparent));
+    border: 1px solid var(--hairline); }
+  .cta-band h2 { font-size: clamp(28px, 4vw, 42px); margin: 0 0 12px; }
+  .cta-band p { color: var(--muted); margin: 0 0 24px; }
+  .cta { display: inline-block; background: var(--accent); color: #fff; padding: 13px 34px; border-radius: 12px; font-weight: 600; font-size: 16px; }
+  .cta:hover { filter: brightness(1.08); }
+  .req { margin: 18px 0 0 !important; font-size: 13px; }
+</style>

@@ -1,0 +1,35 @@
+---
+import type { Locale } from '@/i18n';
+const { locale } = Astro.props as { locale: Locale };
+const L = (zh: string, en: string) => (locale === 'en' ? en : zh);
+const quotes = locale === 'en'
+  ? ['“Style is the dress of thoughts.”', '“The palest ink is better than the best memory.”', '“Fill your paper with the breathings of your heart.”']
+  : ['「行到水穷处，坐看云起时。」', '「文章本天成，妙手偶得之。」', '「腹有诗书气自华。」'];
+---
+<section class="welcome">
+  <div class="container" data-reveal>
+    <div class="ink">墨</div>
+    <p class="tagline">{L('每一次打开，都是一场书写的仪式', 'Every launch is a small ritual of writing')}</p>
+    <p id="welcome-quote" class="quote">{quotes[0]}</p>
+  </div>
+</section>
+<style>
+  .welcome { padding: 96px 0; text-align: center; background:
+    radial-gradient(60% 80% at 50% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent); }
+  .ink { font-family: var(--serif); font-size: 64px; line-height: 1; margin-bottom: 18px; }
+  .tagline { font-size: clamp(18px, 2.6vw, 26px); margin: 0 0 16px; }
+  .quote { font-family: var(--serif); color: var(--muted); font-size: clamp(15px, 2.2vw, 20px);
+           min-height: 1.6em; transition: opacity .5s ease; }
+</style>
+<script define:vars={{ quotes }}>
+  const el = document.getElementById('welcome-quote');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (el && !reduce && quotes.length > 1) {
+    let i = 0;
+    setInterval(() => {
+      i = (i + 1) % quotes.length;
+      el.style.opacity = '0';
+      setTimeout(() => { el.textContent = quotes[i]; el.style.opacity = '1'; }, 500);
+    }, 5000);
+  }
+</script>

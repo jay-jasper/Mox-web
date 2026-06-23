@@ -1,0 +1,34 @@
+---
+import type { Locale } from '@/i18n';
+const { locale } = Astro.props as { locale: Locale };
+const L = (zh: string, en: string) => (locale === 'en' ? en : zh);
+const stats = [
+  { big: L('原生', 'Native'), small: L('macOS · 无 Rust 运行时', 'macOS · Rust-free') },
+  { big: 'Metal', small: L('GPU 渲染的动态特效', 'GPU-rendered effects') },
+  { big: L('大文件', 'Big files'), small: L('数万行也流畅打开', 'tens of thousands of lines stay smooth') },
+  { big: '60fps', small: L('每一次滚动与书写', 'every scroll and keystroke') },
+];
+---
+<section class="perf">
+  <div class="container">
+    <h2 data-reveal>{L('快，是一种尊重', 'Fast is a form of respect')}</h2>
+    <div class="grid">
+      {stats.map((s) => (
+        <div class="stat" data-reveal>
+          <div class="big">{s.big}</div>
+          <div class="small">{s.small}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+<style>
+  .perf { padding: 80px 0; }
+  .perf h2 { text-align: center; font-size: clamp(26px, 3.6vw, 40px); margin: 0 0 40px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .stat { text-align: center; padding: 28px 18px; border: 1px solid var(--hairline); border-radius: 14px;
+          background: color-mix(in srgb, #ffffff 3%, transparent); }
+  .big { font-family: var(--serif); font-size: clamp(28px, 4vw, 40px); margin-bottom: 8px; }
+  .small { color: var(--muted); font-size: 14px; line-height: 1.6; }
+  @media (max-width: 760px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+</style>

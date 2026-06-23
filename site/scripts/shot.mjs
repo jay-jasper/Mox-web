@@ -18,6 +18,16 @@ for (const p of paths) {
     const page = await browser.newPage({ viewport: { width: w, height: h }, deviceScaleFactor: 2 });
     await page.goto(base + p, { waitUntil: 'networkidle' });
     await page.waitForTimeout(Number(process.env.WAIT) || 600); // let fonts/animations settle
+    // Scroll through the page so IntersectionObserver scroll-reveals fire, then return to top.
+    await page.evaluate(async () => {
+      const step = window.innerHeight * 0.8;
+      for (let y = 0; y < document.body.scrollHeight; y += step) {
+        window.scrollTo(0, y);
+        await new Promise((r) => setTimeout(r, 120));
+      }
+      window.scrollTo(0, 0);
+    });
+    await page.waitForTimeout(700);
     const name = (p.replace(/[\/]/g, '_') || 'root') + `_${tag}.png`;
     await page.screenshot({ path: `${outDir}/${name}`, fullPage: true });
     console.log('shot', name);

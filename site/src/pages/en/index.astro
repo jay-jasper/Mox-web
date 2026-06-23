@@ -1,14 +1,17 @@
 ---
 import Base from '@/layouts/Base.astro';
 import HeroHandwriting from '@/components/HeroHandwriting.astro';
+import Features from '@/components/Features.astro';
 import ThemeGallery from '@/components/ThemeGallery.astro';
+import PerfBand from '@/components/PerfBand.astro';
+import WelcomeShowcase from '@/components/WelcomeShowcase.astro';
+import DownloadCTA from '@/components/DownloadCTA.astro';
 ---
 <Base title="Mox — Write beautifully, think clearly" description="A native macOS WYSIWYG Markdown editor with 20 themes and live effects">
   <HeroHandwriting locale="en" />
-  <section id="features" class="container section"><h2>Features</h2><p class="muted">(feature narrative — M4)</p></section>
+  <Features locale="en" />
   <ThemeGallery locale="en" />
+  <PerfBand locale="en" />
+  <WelcomeShowcase locale="en" />
+  <DownloadCTA locale="en" />
 </Base>
-<style>
-  .section { padding: 48px 24px; }
-  .muted { color: var(--muted); }
-</style>

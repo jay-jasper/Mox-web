@@ -1,0 +1,115 @@
+---
+import type { Locale } from '@/i18n';
+const { locale } = Astro.props as { locale: Locale };
+const L = (zh: string, en: string) => (locale === 'en' ? en : zh);
+
+interface Item { kind: string; t: string; d: string; }
+const items: Item[] = [
+  { kind: 'wysiwyg', t: L('所见即所得', 'WYSIWYG, truly'),
+    d: L('Typora 风格的混合编辑：标记随光标显隐，写的就是看到的。折叠、智能标点、拼写检查，一切恰到好处。',
+         'A Typora-style hybrid editor: syntax markers appear only at the caret. Folding, smart punctuation, spell-check — all in their place.') },
+  { kind: 'math', t: L('数学 · 图表 · 思维导图画布', 'Math, diagrams, canvas'),
+    d: L('SwiftMath 渲染行内与独立公式；Mermaid / Vega / Graphviz 实时绘图；一键把文档变成 Excalidraw 思维导图画布。',
+         'SwiftMath for inline & display equations; live Mermaid / Vega / Graphviz; turn any doc into an Excalidraw mind-map canvas.') },
+  { kind: 'graph', t: L('知识图谱', 'Knowledge graph'),
+    d: L('用 [[wiki 链接]] 连接整个工作区，力导向图谱让想法之间的脉络看得见，可缩放、可拖拽。',
+         'Link your whole workspace with [[wiki links]]. A force-directed graph makes the connections between ideas visible — zoom and drag.') },
+  { kind: 'pdf', t: L('PDF 阅读与标注', 'Read & annotate PDFs'),
+    d: L('在同一个窗口读 PDF：文本选择、高亮、批注、双页模式、暗色反相，读到哪标到哪。',
+         'Read PDFs in the same window: select text, highlight, annotate, two-page mode, dark invert. Leave traceable notes as you go.') },
+  { kind: 'resume', t: L('简历工坊', 'Resume Studio'),
+    d: L('左侧结构化表单，右侧实时分页预览；多套模板、可拖拽排序板块，导出即用。',
+         'Structured form on the left, live paginated preview on the right. Multiple templates, drag-to-reorder sections, export-ready.') },
+  { kind: 'quicknote', t: L('速记', 'Quick Notes'),
+    d: L('全局热键随手呼出浮动便签，钉在屏幕、贴边收纳、存到桌面 —— 灵感不必等编辑器打开。',
+         'A global hotkey summons a floating sticky note — pin it, dock it to the edge, save it to the desktop. Capture before it’s gone.') },
+  { kind: 'export', t: L('导出', 'Export anywhere'),
+    d: L('PDF（自定义页面、页眉页脚）、HTML、图片，以及 Pandoc 的 Docx / LaTeX / EPUB 等多种格式。',
+         'PDF (custom page, headers/footers), HTML, image, and Pandoc formats like Docx / LaTeX / EPUB.') },
+];
+---
+<section id="features" class="features">
+  <div class="container">
+    <h2 data-reveal>{L('为长文写作而生的一切', 'Everything long-form writing needs')}</h2>
+    <div class="list">
+      {items.map((it, i) => (
+        <article class:list={["block", { rev: i % 2 === 1 }]} data-reveal>
+          <div class="copy">
+            <h3>{it.t}</h3>
+            <p>{it.d}</p>
+          </div>
+          <div class="visual" data-kind={it.kind}>
+            <div class="panel">
+              {it.kind === 'wysiwyg' && (
+                <div class="mock">
+                  <div class="row"><span class="tag">#</span> <b>{L('标题', 'Heading')}</b></div>
+                  <div class="row dim">**{L('粗体', 'bold')}** → <b>{L('粗体', 'bold')}</b></div>
+                  <div class="row mono">- [x] {L('完成', 'done')}</div>
+                </div>
+              )}
+              {it.kind === 'math' && (
+                <div class="mock center"><div class="formula">e<sup>iπ</sup> + 1 = 0</div><div class="bars"><i style="height:60%"></i><i style="height:90%"></i><i style="height:40%"></i><i style="height:75%"></i></div></div>
+              )}
+              {it.kind === 'graph' && (
+                <svg viewBox="0 0 200 120" class="mock svg"><line x1="50" y1="60" x2="110" y2="30"/><line x1="50" y1="60" x2="120" y2="90"/><line x1="110" y1="30" x2="160" y2="60"/><circle cx="50" cy="60" r="9"/><circle cx="110" cy="30" r="7"/><circle cx="120" cy="90" r="6"/><circle cx="160" cy="60" r="8"/></svg>
+              )}
+              {it.kind === 'pdf' && (
+                <div class="mock"><div class="row">{L('第 12 页', 'Page 12')}</div><div class="row"><mark>{L('被高亮的句子', 'a highlighted line')}</mark></div><div class="row dim">{L('旁注：重点', 'note: key point')}</div></div>
+              )}
+              {it.kind === 'resume' && (
+                <div class="mock split"><div class="form"><i></i><i></i><i style="width:60%"></i></div><div class="paper"><b></b><i></i><i style="width:80%"></i></div></div>
+              )}
+              {it.kind === 'quicknote' && (
+                <div class="mock"><div class="sticky"><div class="dot"></div>{L('随手记一句', 'jot a quick line')}</div></div>
+              )}
+              {it.kind === 'export' && (
+                <div class="mock chips"><span>PDF</span><span>HTML</span><span>PNG</span><span>Docx</span><span>EPUB</span></div>
+              )}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .features { padding: 64px 0 32px; }
+  .features h2 { text-align: center; font-size: clamp(28px, 4vw, 44px); margin: 0 0 56px; }
+  .list { display: flex; flex-direction: column; gap: 72px; }
+  .block { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .block.rev .copy { order: 2; }
+  .copy h3 { font-size: clamp(22px, 3vw, 30px); margin: 0 0 12px; }
+  .copy p { color: var(--muted); font-size: 16px; line-height: 1.8; margin: 0; max-width: 46ch; }
+
+  .panel { border-radius: 16px; padding: 28px; min-height: 200px; display: flex; align-items: center; justify-content: center;
+           background: linear-gradient(145deg, color-mix(in srgb, var(--accent) 14%, transparent), color-mix(in srgb, #ffffff 4%, transparent));
+           border: 1px solid var(--hairline); }
+  .mock { width: 100%; font-size: 15px; line-height: 2; }
+  .mock.center { text-align: center; }
+  .mock .row { display: flex; align-items: center; gap: 8px; }
+  .mock .dim { color: var(--muted); }
+  .mock .mono { font-family: ui-monospace, monospace; color: var(--accent); }
+  .mock .tag { color: var(--accent); font-weight: 700; }
+  .formula { font-family: var(--serif); font-size: 30px; margin-bottom: 16px; }
+  .bars { display: flex; gap: 8px; align-items: flex-end; height: 70px; justify-content: center; }
+  .bars i { width: 18px; background: var(--accent); border-radius: 4px 4px 0 0; opacity: .8; }
+  .svg { width: 100%; height: 140px; }
+  .svg line { stroke: color-mix(in srgb, var(--fg) 30%, transparent); stroke-width: 1.5; }
+  .svg circle { fill: var(--accent); }
+  mark { background: color-mix(in srgb, var(--accent) 30%, transparent); color: var(--fg); padding: 0 4px; border-radius: 3px; }
+  .split { display: flex; gap: 14px; }
+  .split .form, .split .paper { flex: 1; background: color-mix(in srgb, var(--fg) 6%, transparent); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .split i { height: 8px; background: color-mix(in srgb, var(--fg) 18%, transparent); border-radius: 4px; display: block; }
+  .split b { height: 12px; width: 50%; background: var(--accent); border-radius: 4px; display: block; }
+  .sticky { background: #f7d774; color: #3a2f12; padding: 18px; border-radius: 10px; box-shadow: 0 12px 30px rgba(0,0,0,.3); position: relative; max-width: 220px; margin: 0 auto; }
+  .sticky .dot { position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 50%; background: #b4912e; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .chips span { border: 1px solid var(--hairline); border-radius: 999px; padding: 7px 16px; font-size: 14px; color: var(--muted); }
+
+  @media (max-width: 760px) {
+    .block, .block.rev .copy { grid-template-columns: 1fr; order: 0; }
+    .block { gap: 22px; }
+    .visual { order: 2; }
+  }
+</style>

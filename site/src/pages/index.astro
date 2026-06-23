@@ -1,14 +1,17 @@
 ---
 import Base from '@/layouts/Base.astro';
 import HeroHandwriting from '@/components/HeroHandwriting.astro';
+import Features from '@/components/Features.astro';
 import ThemeGallery from '@/components/ThemeGallery.astro';
+import PerfBand from '@/components/PerfBand.astro';
+import WelcomeShowcase from '@/components/WelcomeShowcase.astro';
+import DownloadCTA from '@/components/DownloadCTA.astro';
 ---
 <Base title="Mox — 专注写作，优雅表达" description="原生 macOS 所见即所得 Markdown 编辑器，20 套主题与动态特效">
   <HeroHandwriting locale="zh" />
-  <section id="features" class="container section"><h2>功能</h2><p class="muted">（功能叙事板块在 M4 实现）</p></section>
+  <Features locale="zh" />
   <ThemeGallery locale="zh" />
+  <PerfBand locale="zh" />
+  <WelcomeShowcase locale="zh" />
+  <DownloadCTA locale="zh" />
 </Base>
-<style>
-  .section { padding: 48px 24px; }
-  .muted { color: var(--muted); }
-</style>
