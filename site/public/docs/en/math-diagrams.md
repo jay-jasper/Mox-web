@@ -19,9 +19,7 @@ $$
 
 Tag a code block with the right language for live rendering:
 
-- ` ```mermaid ` — flowcharts, sequence, Gantt
-- ` ```vega ` / ` ```vega-lite ` — data visualization
-- ` ```graphviz ` — relationship / topology graphs
+- ` ```mermaid ` — flowcharts, sequence, Gantt, mindmaps, plus bar/line charts (`xychart-beta`) and pie charts (`pie`)
 
 Diagrams are cached, so they don't flicker while you edit.
 
