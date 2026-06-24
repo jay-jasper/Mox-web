@@ -27,7 +27,8 @@ const links = [
 const other = withBase(isEn ? '/' : '/en');
 ---
 <nav class="nav">
-  <div class="container nav-inner">
+  <div class="container">
+   <div class="nav-inner">
     <a class="brand" href={home} aria-label="Mox">
       <span class="badge" id="nav-mo" aria-hidden="true"></span><span class="word">Mox</span>
     </a>
@@ -48,12 +49,13 @@ const other = withBase(isEn ? '/' : '/en');
         <span>{t(locale, 'nav.themes')}</span>
       </button>
     </div>
+   </div>
   </div>
 </nav>
 <style>
   /* Floating capsule bar (zditor-style). */
   .nav { position: sticky; top: 0; z-index: 50; padding: 12px 0; }
-  .nav-inner { display: flex; align-items: center; gap: 28px; height: 56px; max-width: 980px; padding: 0 8px 0 16px;
+  .nav-inner { display: flex; align-items: center; gap: 28px; height: 56px; width: 100%; padding: 0 8px 0 16px;
     border-radius: 999px; background: color-mix(in srgb, var(--card) 86%, transparent);
     backdrop-filter: blur(14px); border: 1px solid var(--hairline); box-shadow: 0 8px 28px rgba(0,0,0,.12); }
   .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; color: var(--fg); }
