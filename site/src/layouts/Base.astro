@@ -4,7 +4,7 @@ import Nav from '@/components/Nav.astro';
 import Footer from '@/components/Footer.astro';
 import ThemePanel from '@/components/ThemePanel.astro';
 import { withBase } from '@/lib/url';
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import type { Locale } from '@/i18n';
 const { title, description, hero } = Astro.props as { title: string; description?: string; hero?: boolean };
 // Locale + canonical/hreflang computed RELATIVE TO THE BASE PATH (e.g. "/Mox-web/"),
@@ -55,7 +55,7 @@ const enHref = new URL(base + enRel, Astro.site).href;
     </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <ViewTransitions />
+    <ClientRouter />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}

@@ -11,7 +11,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "astro": "^4.16.0",
+    "astro": "^7.0.7",
     "hanzi-writer": "^3.7.3",
     "markdown-it": "^14.2.0",
     "turndown": "^7.2.4"
@@ -21,6 +21,6 @@
     "@types/turndown": "^5.0.6",
     "playwright": "^1.61.0",
     "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
+    "vitest": "^4.1.10"
   }
 }
