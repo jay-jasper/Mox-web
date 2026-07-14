@@ -31,7 +31,7 @@ Mox reads and writes your local `.md` files directly — nothing is uploaded. Yo
 
 ## The app stays running after I close the window?
 
-With "Keep in Menu Bar" enabled, Mox keeps a menu-bar entry for creating a document or showing the main window again. Use "Quit Mox" there to exit fully, or disable residency in Settings.
+Use Settings > General > "Quit when closing the window" to choose whether Mox exits after its last window closes. You can always press `⌘Q` to quit fully.
 
 ## Is there AI support?
 

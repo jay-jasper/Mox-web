@@ -23,7 +23,7 @@ Mox has no proprietary format — it reads and writes your local `.md` files dir
 
 - `⌘T` new tab, `⌘W` close tab, `⌃⇥` cycle tabs.
 - `⌘N` new document, `⌘⇧N` new window; windows are independent.
-- With "Keep in Menu Bar" enabled, closing the main window still lets you create a document or show the window again from the menu bar; "Quit Mox" there exits fully.
+- Choose whether closing the last window quits the app in Settings > General.
 
 ## Write your first note
 
