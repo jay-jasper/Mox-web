@@ -7,7 +7,8 @@
 | New document | `⌘N` |
 | New tab | `⌘T` |
 | New window | `⌘⇧N` |
-| Open folder | `⌘O` |
+| Open file | `⌘O` |
+| Open folder | `⇧⌘O` |
 | Save | `⌘S` |
 | Close tab | `⌘W` |
 | Cycle tabs | `⌃⇥` |

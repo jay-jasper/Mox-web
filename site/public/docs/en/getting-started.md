@@ -14,9 +14,9 @@ Welcome to **Mox** — a WYSIWYG Markdown editor built for macOS. Markers slip a
 
 Mox has no proprietary format — it reads and writes your local `.md` files directly, and any plain folder is a workspace.
 
-- Click "Open Folder…" in the sidebar, or press `⌘O`.
+- Use File > Open… or `⌘O` for a file; use Open Folder… or `⇧⌘O` to establish or switch workspaces.
 - Browse the file tree; right-click a file or folder to create, rename, delete, or reveal in Finder.
-- Mount several workspace roots at once and switch freely.
+- Use the `+` beside Workspace in the sidebar to mount more roots; opening a file activates its containing root.
 - Drag a file/folder onto the window to open it quickly.
 
 ## Tabs & windows
