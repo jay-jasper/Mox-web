@@ -6,10 +6,6 @@ const L = (zh: string, en: string) => (locale === 'en' ? en : zh);
 interface Entry { date: string; t: string; d: string; }
 // Curated from the project's commit history (2026-05-28 → present), newest first.
 const entries: Entry[] = [
-  { date: '2026-06-23', t: L('速记增强', 'Quick Notes, refined'),
-    d: L('钉在屏幕、居中生成、贴边握柄、管理面板删除，以及菜单栏速记列表。', 'Pin to screen, centered spawn, edge handle, delete from the manager, and a menu-bar notes list.') },
-  { date: '2026-06-22', t: L('速记上线 · 菜单栏常驻', 'Quick Notes · resident menu bar'),
-    d: L('浮动便签、存到桌面、停靠抽屉、全局快捷键 ⌥⌘N、便签管理器；关窗后退居菜单栏常驻。', 'Floating notes, save-to-Desktop, edge-dock, the ⌥⌘N hotkey, a manager — and the app stays resident in the menu bar after the window closes.') },
   { date: '2026-06-22', t: L('导出详细设置', 'Rich export settings'),
     d: L('分格式的导出设置面板、导出时即时覆盖与实时预览。', 'Per-format export panels with on-the-fly overrides and live preview.') },
   { date: '2026-06-21', t: L('内联嵌入编辑 · 简历工坊重做', 'Inline embeds · Resume Studio rework'),

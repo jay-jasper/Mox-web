@@ -31,7 +31,7 @@ Mox reads and writes your local `.md` files directly — nothing is uploaded. Yo
 
 ## The app stays running after I close the window?
 
-Yes. Mox stays resident in the menu bar so Quick Notes are always available. Use "Quit Mox" from the menu bar to fully exit.
+With "Keep in Menu Bar" enabled, Mox keeps a menu-bar entry for creating a document or showing the main window again. Use "Quit Mox" there to exit fully, or disable residency in Settings.
 
 ## Is there AI support?
 

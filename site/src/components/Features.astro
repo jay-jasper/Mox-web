@@ -17,9 +17,6 @@ const items: Item[] = [
   { kind: 'resume', t: L('简历工坊', 'Resume Studio'),
     d: L('左侧结构化表单，右侧实时分页预览；多套模板、可拖拽排序板块，导出即用。',
          'Structured form on the left, live paginated preview on the right. Multiple templates, drag-to-reorder sections, export-ready.') },
-  { kind: 'quicknote', t: L('速记', 'Quick Notes'),
-    d: L('全局热键随手呼出浮动便签，钉在屏幕、贴边收纳、存到桌面 —— 灵感不必等编辑器打开。',
-         'A global hotkey summons a floating sticky note — pin it, dock it to the edge, save it to the desktop. Capture before it’s gone.') },
   { kind: 'export', t: L('导出', 'Export anywhere'),
     d: L('PDF（自定义页面、页眉页脚）、HTML、图片，以及 Pandoc 的 Docx / LaTeX / EPUB 等多种格式。',
          'PDF (custom page, headers/footers), HTML, image, and Pandoc formats like Docx / LaTeX / EPUB.') },
@@ -55,9 +52,6 @@ const items: Item[] = [
               )}
               {it.kind === 'resume' && (
                 <div class="mock split"><div class="form"><i></i><i></i><i style="width:60%"></i></div><div class="paper"><b></b><i></i><i style="width:80%"></i></div></div>
-              )}
-              {it.kind === 'quicknote' && (
-                <div class="mock"><div class="sticky"><div class="dot"></div>{L('随手记一句', 'jot a quick line')}</div></div>
               )}
               {it.kind === 'export' && (
                 <div class="mock chips"><span>PDF</span><span>HTML</span><span>PNG</span><span>Docx</span><span>EPUB</span></div>
@@ -99,8 +93,6 @@ const items: Item[] = [
   .split .form, .split .paper { flex: 1; background: color-mix(in srgb, var(--fg) 6%, transparent); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
   .split i { height: 8px; background: color-mix(in srgb, var(--fg) 18%, transparent); border-radius: 4px; display: block; }
   .split b { height: 12px; width: 50%; background: var(--accent); border-radius: 4px; display: block; }
-  .sticky { background: #f7d774; color: #3a2f12; padding: 18px; border-radius: 10px; box-shadow: 0 12px 30px rgba(0,0,0,.3); position: relative; max-width: 220px; margin: 0 auto; }
-  .sticky .dot { position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 50%; background: #b4912e; }
   .chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
   .chips span { border: 1px solid var(--hairline); border-radius: 999px; padding: 7px 16px; font-size: 14px; color: var(--muted); }
 

@@ -6,8 +6,8 @@ const modes = isEn
   ? [['wysiwyg', 'Rich Text'], ['source', 'Source'], ['split', 'Split']]
   : [['wysiwyg', '富文本'], ['source', '源码'], ['split', '分屏']];
 const initial = isEn
-  ? `# Hello, Mox\n\n**Rich-text** Markdown writing — markers hide as you type.\n\n- Math, diagrams, mind-maps\n- Knowledge graph & quick notes\n- One-click export\n\n> Write the first line; the rest will follow.\n\n\`mox()\``
-  : `# 你好，Mox\n\n**富文本**式的 Markdown 写作，标记随光标隐去。\n\n- 数学、图表、思维导图\n- 知识图谱与速记\n- 一键导出多种格式\n\n> 写下第一行，余下的自会跟来。\n\n\`mox()\``;
+  ? `# Hello, Mox\n\n**Rich-text** Markdown writing — markers hide as you type.\n\n- Math, diagrams, mind-maps\n- Knowledge graph & backlinks\n- One-click export\n\n> Write the first line; the rest will follow.\n\n\`mox()\``
+  : `# 你好，Mox\n\n**富文本**式的 Markdown 写作，标记随光标隐去。\n\n- 数学、图表、思维导图\n- 知识图谱与反向链接\n- 一键导出多种格式\n\n> 写下第一行，余下的自会跟来。\n\n\`mox()\``;
 ---
 <div id="live-editor" class="le" data-initial={initial}>
   <div class="le-bar">
