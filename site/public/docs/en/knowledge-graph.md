@@ -2,11 +2,10 @@
 
 Weave scattered notes into a network and see how ideas connect.
 
-## Wiki links
+## Document links
 
-- Reference another note anywhere with `[[note name]]`.
-- Typing `[[` opens autocomplete — pick an existing note or create one.
-- Links resolve as you type and are clickable to jump to the target.
+- Reference another note with a standard Markdown link such as `[Note](note.md)`.
+- Workspace-relative targets are clickable and feed backlinks and graph edges.
 
 ## Backlinks
 
