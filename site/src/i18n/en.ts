@@ -1,6 +1,7 @@
 import type { StringKey } from './zh';
 
 export const en: Partial<Record<StringKey, string>> = {
+  'nav.home': 'Home',
   'nav.features': 'Features',
   'nav.themes': 'Themes',
   'nav.docs': 'Docs',

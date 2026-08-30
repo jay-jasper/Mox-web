@@ -22,6 +22,7 @@
       "group": "参考",
       "items": [
         { "slug": "shortcuts", "title": "快捷键" },
+        { "slug": "performance", "title": "性能测试" },
         { "slug": "faq", "title": "常见问题" }
       ]
     },
@@ -56,6 +57,7 @@
       "group": "Reference",
       "items": [
         { "slug": "shortcuts", "title": "Shortcuts" },
+        { "slug": "performance", "title": "Performance" },
         { "slug": "faq", "title": "FAQ" }
       ]
     },

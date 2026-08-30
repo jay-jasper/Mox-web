@@ -1,4 +1,5 @@
 export const zh = {
+  'nav.home': '首页',
   'nav.features': '功能',
   'nav.themes': '主题',
   'nav.docs': '文档',
