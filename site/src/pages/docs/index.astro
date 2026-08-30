@@ -65,6 +65,7 @@ import Base from '@/layouts/Base.astro';
 
 <script>
   import MarkdownIt from 'markdown-it';
+  import { DocsRouteCoordinator } from '../../lib/docs-router';
 
   type Item = { slug: string; title: string };
   type Group = { group: string; items: Item[] };
@@ -73,11 +74,15 @@ import Base from '@/layouts/Base.astro';
   let hashHandler: (() => void) | null = null;
   let docsClickHandler: ((e: MouseEvent) => void) | null = null;
   let currentRoute: () => void = () => {}; // latest page's route(), for popstate/hashchange
+  const routeCoordinator = new DocsRouteCoordinator();
+  let swapTimer: number | undefined;
 
   // Re-initialized on every navigation to /docs (the DOM is swapped by view transitions).
   async function setupDocs() {
     const root = document.getElementById('docs');
     if (!root) { // left the docs page — drop the stale hash listener
+      routeCoordinator.cancel();
+      if (swapTimer !== undefined) window.clearTimeout(swapTimer);
       if (hashHandler) { window.removeEventListener('hashchange', hashHandler); hashHandler = null; }
       return;
     }
@@ -95,39 +100,77 @@ import Base from '@/layouts/Base.astro';
 
   function buildNav(lang: string, slug: string) {
     const groups = manifest[lang] || [];
-    navEl.innerHTML = groups.map((g) => `
-      <div class="group">
-        <p class="glabel">${g.group}</p>
-        ${g.items.map((it) => `<a href="#/${lang}/${it.slug}" class="${it.slug === slug ? 'active' : ''}">${it.title}</a>`).join('')}
-      </div>`).join('');
+    const fragment = document.createDocumentFragment();
+    for (const group of groups) {
+      const container = document.createElement('div');
+      container.className = 'group';
+      const label = document.createElement('p');
+      label.className = 'glabel';
+      label.textContent = group.group;
+      container.append(label);
+      for (const item of group.items) {
+        if (!/^[\w-]+$/.test(item.slug)) continue;
+        const link = document.createElement('a');
+        link.setAttribute('href', `#/${lang}/${item.slug}`);
+        if (item.slug === slug) link.className = 'active';
+        link.textContent = item.title;
+        container.append(link);
+      }
+      fragment.append(container);
+    }
+    navEl.replaceChildren(fragment);
   }
 
   function slugify(s: string) { return s.trim().toLowerCase().replace(/[^\w一-龥]+/g, '-'); }
 
   function buildToc() {
     const heads = contentEl.querySelectorAll('h2, h3');
-    const parts: string[] = [];
+    const fragment = document.createDocumentFragment();
+    if (heads.length) {
+      const label = document.createElement('p');
+      label.className = 'glabel';
+      label.textContent = parseHash().lang === 'en' ? 'On this page' : '本页目录';
+      fragment.append(label);
+    }
     heads.forEach((h) => {
       const id = slugify(h.textContent || '');
       h.id = id;
-      parts.push(`<a class="${h.tagName.toLowerCase()}" href="#${id}">${h.textContent}</a>`);
+      const link = document.createElement('a');
+      link.className = h.tagName.toLowerCase();
+      link.setAttribute('href', `#${id}`);
+      link.textContent = h.textContent;
+      fragment.append(link);
     });
-    tocEl.innerHTML = parts.length ? `<p class="glabel">${parseHash().lang === 'en' ? 'On this page' : '本页目录'}</p>${parts.join('')}` : '';
+    tocEl.replaceChildren(fragment);
   }
 
   async function route() {
+    const ticket = routeCoordinator.begin();
+    if (swapTimer !== undefined) {
+      window.clearTimeout(swapTimer);
+      swapTimer = undefined;
+    }
     const { lang, slug } = parseHash();
     buildNav(lang, slug);
     let html = '<h1>404</h1>';
     try {
-      const res = await fetch(`${BASE}docs/${lang}/${slug}.md`);
+      const res = await fetch(`${BASE}docs/${lang}/${slug}.md`, { signal: ticket.signal });
       if (res.ok) html = md.render(await res.text());
-    } catch { /* keep 404 */ }
-    const swap = () => { contentEl.innerHTML = html; buildToc(); requestAnimationFrame(() => contentEl.classList.remove('swapping')); };
+    } catch (error) {
+      if (ticket.signal.aborted) return;
+      console.warn('Documentation navigation failed', error);
+    }
+    if (!routeCoordinator.isCurrent(ticket.generation)) return;
+    const swap = () => {
+      if (!routeCoordinator.isCurrent(ticket.generation)) return;
+      contentEl.innerHTML = html;
+      buildToc();
+      requestAnimationFrame(() => contentEl.classList.remove('swapping'));
+    };
     if (first) { first = false; contentEl.innerHTML = html; buildToc(); }
     else {
       contentEl.classList.add('swapping');           // fade/slide out, then swap + fade in
-      window.setTimeout(swap, 200);
+      swapTimer = window.setTimeout(swap, 200);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
